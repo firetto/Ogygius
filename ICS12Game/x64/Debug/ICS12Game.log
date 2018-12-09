@@ -1,0 +1,9 @@
+﻿  AnimatedSprite.cpp
+c:\users\azsza\onedrive\vs\source\repos\ics12game\ics12game\animatedsprite.cpp(170): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Animation.cpp
+c:\users\azsza\onedrive\vs\source\repos\ics12game\ics12game\animation.cpp(32): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Collision.cpp
+c:\users\azsza\onedrive\vs\source\repos\ics12game\ics12game\collision.cpp(191): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  ICS12Game.cpp
+c:\users\azsza\onedrive\vs\source\repos\ics12game\ics12game\ics12game.cpp(56): fatal error C1010: unexpected end of file while looking for precompiled header. Did you forget to add '#include "stdafx.h"' to your source?
+  Generating Code...
