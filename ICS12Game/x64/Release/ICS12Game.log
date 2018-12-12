@@ -263,9 +263,9 @@ c:\users\azsza\documents\github\ics12game\ics12game\map.h(51): warning C4244: 'a
           [
               T=int
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\map.h(64): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\azsza\documents\github\ics12game\ics12game\map.h(65): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\azsza\documents\github\ics12game\ics12game\map.h(82): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\map.h(68): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\azsza\documents\github\ics12game\ics12game\map.h(69): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\azsza\documents\github\ics12game\ics12game\map.h(86): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
@@ -285,7 +285,7 @@ c:\users\azsza\documents\github\ics12game\ics12game\gamedraw.h(22): warning C424
               T=float
           ]
   Generating code
-  80 of 2588 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
+  5 of 2588 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

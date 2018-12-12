@@ -28,7 +28,7 @@ public:
 		playerPosition.setOutlineColor(sf::Color::Black);
 		playerPosition.setOrigin(sf::Vector2f(playerPosition.getSize().x / 2, playerPosition.getSize().y / 2));
 		playerPosition.rotate(45);
-
+		
 		view.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
 		view.setCenter(sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2));
 
@@ -53,6 +53,10 @@ public:
 				if (squares[i][a].type == BIOME_NONE) {
 					squares[i][a].type = chunkVector[chunk.y][chunk.x].squareVector[square.y][square.x].getType();
 					squares[i][a].rect.setFillColor(BiomeColor[squares[i][a].type]);
+					if (farthestTop == -1 || i < farthestTop) farthestTop = i;
+					if (farthestBot == -1 || i > farthestBot) farthestBot = i;
+					if (farthestLeft == -1 || a < farthestLeft) farthestLeft = a;
+					if (farthestRight == -1 || a > farthestRight) farthestRight = a;
 				}
 			}
 		}
@@ -94,8 +98,8 @@ public:
 	void draw() {
 		WINDOW.draw(screenOverlay);
 		WINDOW.setView(view);
-		for (int i = 0; i < squares.size(); i++) {
-			for (int a = 0; a < squares[i].size(); a++) {
+		for (int i = farthestTop; i < farthestBot; i++) {
+			for (int a = farthestLeft; a < farthestRight; a++) {
 				if (squares[i][a].type != BIOME_NONE) WINDOW.draw(squares[i][a].rect);
 			}
 		}
@@ -120,5 +124,6 @@ private:
 	sf::Vector2f playerPositionSize = sf::Vector2f(12, 12);
 	Camera view;
 	sf::Text mapText;
+	int farthestTop = -1, farthestBot = -1, farthestLeft = -1, farthestRight = -1;
 };
 GameMap map;
