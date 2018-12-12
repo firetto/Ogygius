@@ -190,7 +190,7 @@ private:
 		(keyboard.press(sf::Keyboard::A)) ? -MOVE_AMOUNT : (keyboard.press(sf::Keyboard::D)) ? MOVE_AMOUNT : 0,
 		(keyboard.press(sf::Keyboard::W)) ? -MOVE_AMOUNT : (keyboard.press(sf::Keyboard::S)) ? MOVE_AMOUNT : 0
 		));
-
+		if (GAME_MAP_OPEN) return;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && attackReady && !MOUSE_IN_HUD) {
 			weaponSprite.play(*weaponAnimation);
 			float s = (items.getItemSelected().isTool) ? 1.f : (handsFlipped) ? 1.f : -1.f;
@@ -203,6 +203,7 @@ private:
 	
 	// rotates player based on mouse position on screen
 	void rotatePlayer() {
+		if (GAME_MAP_OPEN) return;
 		// set the view to be player view so that mouse position converts its window coordinates to world coordinates, letting the player turn
 		WINDOW.setView(view);
 

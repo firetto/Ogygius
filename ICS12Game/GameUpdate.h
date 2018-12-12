@@ -1,6 +1,7 @@
 #pragma once
 #include "Player.h"
 #include "DayCycle.h"
+#include "Map.h"
 // main function that updates the entire game
 void gameUpdate(Player &player) {
 	player.update();
@@ -38,4 +39,7 @@ void gameUpdate(Player &player) {
 			}
 		}
 	}
+	map.update(sf::Vector2f(
+		(player.getCurrChunk().x * GAME_SQUARE_PER_CHUNK_AMOUNT.x + player.getCurrSquare().x)*GAME_SQUARE_SIZE + int(player.getPosition().x) % GAME_SQUARE_SIZE, 
+		(player.getCurrChunk().y * GAME_SQUARE_PER_CHUNK_AMOUNT.y + player.getCurrSquare().y)*GAME_SQUARE_SIZE + int(player.getPosition().y) % GAME_SQUARE_SIZE));
 }

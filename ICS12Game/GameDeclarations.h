@@ -16,6 +16,7 @@ const sf::Vector2f GAME_CHUNKS_PER_WORLD_AMOUNT(8, 8);
 const int GAME_SQUARE_SIZE = 128;
 const int GAME_CHUNK_SIZE = GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_SQUARE_SIZE;
 const int GAME_TOTAL_SIZE = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_CHUNK_SIZE;
+
 const int GAME_RENDER_DISTANCE = sqrt(pow(WINDOW.getSize().x / 2, 2) + pow(WINDOW.getSize().y / 2, 2));
 int GAME_VIEW_LEFTCHUNK, GAME_VIEW_RIGHTCHUNK, GAME_VIEW_TOPCHUNK, GAME_VIEW_BOTCHUNK;
 const double GAME_WATER_SLOW_AMOUNT = 0.75; // multiplier
@@ -35,6 +36,9 @@ const float GAME_CLICK_DELAY_TIME = 0.3, DEPTH_BUFFER_SORT_DELAY_TIME = 2;
 
 // whether game click delay has passed
 bool GAME_CLICK_DELAY_PASSED = true;
+
+// whether the map is open
+bool GAME_MAP_OPEN = false;
 
 // item type
 enum ItemType {
@@ -65,6 +69,15 @@ enum BiomeType {
 	BIOME_NONE, BIOME_FOREST, BIOME_GRASSLANDS, BIOME_SAVANNAH, BIOME_DESERT, BIOME_WATER,
 
 	BIOMETYPE_COUNT // used to track the nubmer of BIOMEs
+};
+
+sf::Color BiomeColor[6] = { 
+	sf::Color(0,0,0,255), // NONE
+	sf::Color(136,182,96), // FOREST
+	sf::Color(136,182,96), // GRASSLANDS
+	sf::Color(222, 192, 120), // SAVANNAH
+	sf::Color(237, 232, 192), // DESERT
+	sf::Color(128, 128, 255) // WATER
 };
 
 enum MobType {

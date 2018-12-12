@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "WorldGeneration.h"
 #include "AnimationDeclaration.h"
+#include "Map.h"
 void gameSetup() {
 	// set antialias level of window
 	sf::ContextSettings settings;
@@ -22,10 +23,11 @@ void gameSetup() {
 	
 	// generate the world
 	generateWorld();
+	map = GameMap();
 
 	declareMobs();
 
 	Mob::spawnMob(10, sf::IntRect(int(GAME_CHUNKS_PER_WORLD_AMOUNT.x / 2) - 2, int(GAME_CHUNKS_PER_WORLD_AMOUNT.y / 2) - 2, 4, 4));
-
+	
 	dayOverlayRect.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
 }

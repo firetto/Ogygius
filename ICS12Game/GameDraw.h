@@ -3,6 +3,7 @@
 #include "DroppedItem.h"
 #include "Square.h"
 #include "DayCycle.h"
+#include "Map.h"
 void gameDraw(Player &player) {
 	// clears everything that is on the window (color blue for sea)
 	WINDOW.clear(sf::Color(128, 128, 255));
@@ -42,6 +43,7 @@ void gameDraw(Player &player) {
 
 	// draw crafting hud
 	craftHUD.draw();
+	if (GAME_MAP_OPEN) map.draw();
 
 	// displays everything that was drawn to the window
 	WINDOW.display();

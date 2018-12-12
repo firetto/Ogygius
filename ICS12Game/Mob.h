@@ -46,6 +46,7 @@ public:
 		drawableVector.push_back(ObjDrawable(head, height + 0.1));
 	}
 	sf::Vector2i getCurrChunk() { return currChunk; }
+	sf::Vector2i getCurrSquare() { return currSquare; }
 	// returns rotation (in degrees)
 	double getRotation() {
 		return rotation;

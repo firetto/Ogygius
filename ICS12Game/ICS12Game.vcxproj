@@ -168,6 +168,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="DayCycle.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="CollidableObject.h" />
