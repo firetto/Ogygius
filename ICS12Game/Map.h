@@ -1,8 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Chunk.h"
+#include "GUIScreen.h"
 
-class GameMap {
+class GameMap : public GUIScreen {
 public:
 	GameMap() {
 		width = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_SQUARE_PER_CHUNK_AMOUNT.x;
@@ -17,6 +18,7 @@ public:
 				scale = size / float(GAME_SQUARE_SIZE);
 				squares.back().back().rect.setSize(sf::Vector2f(size, size));
 				squares.back().back().rect.setPosition(WINDOW_DIMENSIONS.x / 2 - size * width / 2 + a * size, WINDOW_DIMENSIONS.y / 2 - size * height / 2 + i * size);
+				squares.back().back().obj.setPosition(squares.back().back().rect.getPosition().x + size / 2, squares.back().back().rect.getPosition().y + size / 2);
 			}
 		}
 		screenOverlay.setFillColor(sf::Color(0, 0, 0, 128));
@@ -24,7 +26,7 @@ public:
 
 		playerPosition.setFillColor(sf::Color::Green);
 		playerPosition.setSize(playerPositionSize);
-		playerPosition.setOutlineThickness(3);
+		playerPosition.setOutlineThickness(playerPositionSize.x/4);
 		playerPosition.setOutlineColor(sf::Color::Black);
 		playerPosition.setOrigin(sf::Vector2f(playerPosition.getSize().x / 2, playerPosition.getSize().y / 2));
 		playerPosition.rotate(45);
@@ -32,12 +34,11 @@ public:
 		view.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
 		view.setCenter(sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2));
 
-		mapText.setCharacterSize(std::min(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y) / 16);
-		mapText.setFont(gameFont);
-		mapText.setString("Game Map");
-		mapText.setOutlineThickness(mapText.getCharacterSize() / 16);
-		mapText.setOrigin(mapText.getGlobalBounds().width / 2, mapText.getGlobalBounds().height / 2);
-		mapText.setPosition(WINDOW_DIMENSIONS.x / 2, mapText.getCharacterSize());
+		setTitleText("Game Map");
+		addButton("Close Map", sf::Vector2f(WINDOW_DIMENSIONS.x / 5, WINDOW_DIMENSIONS.y / 12), sf::Vector2f(WINDOW_DIMENSIONS.x * 0.875, WINDOW_DIMENSIONS.y * 0.95), [] {
+			GAME_MAP_OPEN = false;
+		});
+
 	}
 	void update(sf::Vector2f position) {
 		sf::Vector2i square = sf::Vector2i(position.x / GAME_SQUARE_SIZE, position.y / GAME_SQUARE_SIZE);
@@ -53,6 +54,9 @@ public:
 				if (squares[i][a].type == BIOME_NONE) {
 					squares[i][a].type = chunkVector[chunk.y][chunk.x].squareVector[square.y][square.x].getType();
 					squares[i][a].rect.setFillColor(BiomeColor[squares[i][a].type]);
+					squares[i][a].obj.setTexture(*chunkVector[chunk.y][chunk.x].squareVector[square.y][square.x].obj.vis.getTexture());
+					squares[i][a].obj.setOrigin(squares[i][a].obj.getGlobalBounds().width / 2, squares[i][a].obj.getGlobalBounds().height / 2);
+					squares[i][a].obj.setScale(scale/3, scale/3);
 					if (farthestTop == -1 || i < farthestTop) farthestTop = i;
 					if (farthestBot == -1 || i > farthestBot) farthestBot = i;
 					if (farthestLeft == -1 || a < farthestLeft) farthestLeft = a;
@@ -61,26 +65,33 @@ public:
 			}
 		}
 		if (GAME_MAP_OPEN) {
+			if (resetMap) currentGUIScreen = this;
+			resetMap = false;
 			int mouse_wheel;
 			switch (event.type) {
 			case sf::Event::MouseWheelScrolled:
 				mouse_wheel = (event.mouseWheel.x < 0) ? 1 : -1;
-				if (mouse_wheel > 0 && view.getCameraZoom() < 3) view.cameraZoom(1.1);
+				if (mouse_wheel > 0 && view.getCameraZoom() < 1) view.cameraZoom(1.1);
 				else if (view.getCameraZoom() > 0.2) view.cameraZoom(0.9);
+				updatePlayerPositionRect();
+				followPlayer = false;
 				break;
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == 0) {
 					draggingScreen = true;
 					oldMousePos = WINDOW.mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
+					followPlayer = false;
 				}
 				break;
 			case sf::Event::MouseButtonReleased:
 				if (event.mouseButton.button == 0) {
 					draggingScreen = false;
+					followPlayer = false;
 				}
 				break;
 			case sf::Event::MouseMoved:
 				if (!draggingScreen) break;
+				followPlayer = false;
 				sf::Vector2f
 					newPos = WINDOW.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y)),
 					deltaPos = sf::Vector2f((oldMousePos.x - newPos.x)*(view.getCameraZoom()), (oldMousePos.y - newPos.y)*(view.getCameraZoom()));
@@ -89,10 +100,30 @@ public:
 				oldMousePos = WINDOW.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
 				break;
 			}
+			if (view.getCenter().x - playerPosition.getPosition().x > view.getSize().x / 2)
+				view.setCenter(playerPosition.getPosition().x + view.getSize().x / 2, view.getCenter().y);
+			else if (playerPosition.getPosition().x - view.getCenter().x > view.getSize().x / 2)
+				view.setCenter(playerPosition.getPosition().x - view.getSize().x / 2, view.getCenter().y);
+
+			if (view.getCenter().y - playerPosition.getPosition().y > view.getSize().y / 2)
+				view.setCenter(view.getCenter().x, playerPosition.getPosition().y + view.getSize().y / 2);
+			else if (playerPosition.getPosition().y - view.getCenter().y > view.getSize().y / 2)
+				view.setCenter(view.getCenter().x, playerPosition.getPosition().y - view.getSize().y / 2);
+
+			if (followPlayer) {
+				view.setCenter(playerPosition.getPosition());
+			}
 		}
 		else {
-			view.cameraZoomReset();
-			view.setCenter(sf::Vector2f(WINDOW_DIMENSIONS / 2));
+			if (!resetMap) {
+				currentGUIScreen = &gameScreen;
+				view.cameraZoomReset();
+				view.cameraZoom((float(std::min(farthestBot - farthestTop, farthestRight - farthestLeft)) / (GAME_CHUNKS_PER_WORLD_AMOUNT.x*GAME_SQUARE_PER_CHUNK_AMOUNT.x / 1.5)));
+				view.setCenter(playerPosition.getPosition());
+				updatePlayerPositionRect();
+				followPlayer = true;
+				resetMap = true;
+			}
 		}
 	}
 	void draw() {
@@ -100,24 +131,34 @@ public:
 		WINDOW.setView(view);
 		for (int i = farthestTop; i < farthestBot; i++) {
 			for (int a = farthestLeft; a < farthestRight; a++) {
-				if (squares[i][a].type != BIOME_NONE) WINDOW.draw(squares[i][a].rect);
+				if (squares[i][a].type != BIOME_NONE && view.inView(squares[i][a].rect.getGlobalBounds())) {
+					WINDOW.draw(squares[i][a].rect);
+					//WINDOW.draw(squares[i][a].obj);
+				}
 			}
 		}
 		WINDOW.draw(playerPosition);
 		WINDOW.setView(WINDOW.getDefaultView());
-		WINDOW.draw(mapText);
+		GUIScreen::update();
 	}
 	Camera &getView() { return view; }
 private:
 	struct GameMapSquare {
 		BiomeType type;
 		sf::RectangleShape rect;
+		sf::Sprite obj;
 	};
+	void updatePlayerPositionRect() {
+		playerPosition.setSize(sf::Vector2f(playerPositionSize.x*view.getCameraZoom(), playerPositionSize.y*view.getCameraZoom()));
+		playerPosition.setOutlineThickness(playerPositionSize.x / 4 * view.getCameraZoom());
+		playerPosition.setOrigin(playerPosition.getSize().x / 2, playerPosition.getSize().y / 2);
+	}
 	std::vector<std::vector<GameMapSquare>> squares;
 	int width, height;
 	float scale;
 	int radius = 6;
 	bool draggingScreen = false;
+	bool followPlayer = true, resetMap = false;
 	sf::Vector2f oldMousePos;
 	sf::RectangleShape screenOverlay;
 	sf::RectangleShape playerPosition;

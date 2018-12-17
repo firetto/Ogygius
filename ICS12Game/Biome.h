@@ -22,6 +22,7 @@ public:
 };
 std::map<BiomeType, Biome> biomeMap;
 void generateBiomes() {
+	if (biomeMap.size() > 0) return;
 	for (int i = 1; i < BIOMETYPE_COUNT; i++) {
 		biomeMap.insert(std::pair<BiomeType, Biome>(BiomeType(i), Biome()));
 	}

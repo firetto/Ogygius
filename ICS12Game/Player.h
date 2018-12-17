@@ -40,7 +40,7 @@ public:
 		physics();
 
 		// rotate the player sprite
-		if (!MOUSE_IN_HUD) rotatePlayer();
+		if (!MOUSE_IN_HUD && !GAME_PAUSED) rotatePlayer();
 
 		// updates camera
 		view.cameraPhysics();
@@ -92,8 +92,6 @@ public:
 		return sf::Vector2f(newXChange, newYChange);
 	}
 
-
-
 	// draw the player 
 	void draw() {
 		drawableVector.emplace_back(ObjDrawable(weaponCollisionSprite, height - 0.01));
@@ -140,6 +138,16 @@ public:
 		}
 	}
 
+	// reset the player
+	void reset() {
+		items.clear();
+		isAttacking = false;
+		isPlacing = false;
+		attackReady = true;
+		handsFlipped = false;
+		rotation = 0;
+	}
+
 	// return player view
 	Camera &getView() { return view; }
 
@@ -157,11 +165,11 @@ private:
 	// semi transparent sprite for placing stuff
 	sf::Sprite placeSprite;
 
-	// how much the acceleration changes every tick that the player is moving
-	const float MOVE_AMOUNT = 0.25;
+	// how much the acceleration changes every tick that the player is moving. Cannot be declared const
+	float MOVE_AMOUNT = 0.25;
 
-	// attack speed times per second
-	const float attackSpeed = 2;
+	// attack speed times per second. cannot be declared const.
+	float attackSpeed = 2;
 
 	// animation of fist
 	Animation* weaponAnimation = &fistAnimation;
@@ -186,6 +194,7 @@ private:
 
 	// controls for movement, etc
 	void controls() {
+		if (GAME_PAUSED) return;
 		changeAcceleration(sf::Vector2f(
 		(keyboard.press(sf::Keyboard::A)) ? -MOVE_AMOUNT : (keyboard.press(sf::Keyboard::D)) ? MOVE_AMOUNT : 0,
 		(keyboard.press(sf::Keyboard::W)) ? -MOVE_AMOUNT : (keyboard.press(sf::Keyboard::S)) ? MOVE_AMOUNT : 0
@@ -307,5 +316,5 @@ private:
 
 	
 };
-
+Player *globalPlayer; // a player variable to be accessed basically only by the lambda functions in GameSetup...
 // MATTHEW 

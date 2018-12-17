@@ -113,7 +113,7 @@ double Camera::getCameraZoom() {
 bool Camera::inView(sf::FloatRect obj) {
 	sf::RectangleShape cameraBoundary;
 	cameraBoundary.setSize(sf::Vector2f(getSize().x, getSize().y));
-	cameraBoundary.setPosition(getPosition().x - getSize().x / 2, getPosition().y - getSize().y / 2);
+	cameraBoundary.setPosition(getCenter().x - getSize().x / 2, getCenter().y - getSize().y / 2);
 	if (cameraBoundary.getGlobalBounds().intersects(obj)) return true;
 	return false;
 }

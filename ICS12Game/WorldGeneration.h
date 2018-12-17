@@ -7,6 +7,7 @@ sf::RectangleShape ground;
 void generateWorld() {
 	generateBiomes();
 	//generateSquares();
+	if (chunkVector.size() > 0) chunkVector.clear();
 	for (int y = 0; y < GAME_CHUNKS_PER_WORLD_AMOUNT.y; y++) {
 		chunkVector.push_back(std::vector<Chunk>());
 		for (int x = 0; x < GAME_CHUNKS_PER_WORLD_AMOUNT.x; x++) {

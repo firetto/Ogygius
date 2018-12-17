@@ -105,5 +105,9 @@ void textureLoad() {
 
 	for (int i = 0; i < MOBTYPE_COUNT; i++) loadTexture(mobTextureMap[i], mobTextureDirectoryMap[i]);
 
+	
+}
+
+void fontLoad() {
 	gameFont.loadFromFile("gameFont.ttf");
 }

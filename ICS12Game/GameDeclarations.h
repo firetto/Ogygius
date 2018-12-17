@@ -2,6 +2,14 @@
 #include "Declarations.h"
 // this file is for game declarations of 6physics and other stuff.
 
+// whether the game is running
+bool GAME_RUNNING = false;
+
+// if the game is running, if it has been paused.
+bool GAME_PAUSED = false;
+
+sf::RectangleShape pauseOverlayRect;
+
 // acceleration and velocity divides by the friction (not real friction, but who cares, this isn't a physics simulation :P)
 const float GAME_FRICTION = 1.25; 
 

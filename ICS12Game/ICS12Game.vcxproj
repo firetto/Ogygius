@@ -168,6 +168,9 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Chunk.h" />
     <ClInclude Include="DayCycle.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="GUIScreen.h" />
+    <ClInclude Include="MainMenuAnimation.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mob.h" />
     <ClInclude Include="Square.h" />

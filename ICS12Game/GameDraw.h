@@ -1,4 +1,5 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include "Breakable.h"
 #include "DroppedItem.h"
 #include "Square.h"
@@ -37,14 +38,22 @@ void gameDraw(Player &player) {
 
 	// draw night filter
 	WINDOW.draw(dayOverlayRect);
+	if (GAME_PAUSED) {
+		WINDOW.draw(pauseOverlayRect);
+		pauseMenuScreen.update();
+	}
+	else {
+		if (GAME_MAP_OPEN) map.draw();
+		else {
+			// draws player itembar
+			player.items.draw();
 
-	// draws player itembar
-	player.items.draw();
+			// draw crafting hud
+			craftHUD.draw();
+		}
+	}
 
-	// draw crafting hud
-	craftHUD.draw();
-	if (GAME_MAP_OPEN) map.draw();
-
+	currentGUIScreen->update();
 	// displays everything that was drawn to the window
 	WINDOW.display();
 }

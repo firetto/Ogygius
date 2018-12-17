@@ -133,7 +133,12 @@ public:
 	}
 	int getSize() { return item.size(); }
 	Item itemToDrop = Item(itemMap[0], 0);
-
+	
+	void clear() {
+		for (int i = 0; i < barSize; i++) {
+			item[i].clear();
+		}
+	}
 	void draw() {
 		WINDOW.draw(bar);
 		for (int i = 0; i < barSize; i++) {
