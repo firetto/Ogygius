@@ -10,7 +10,7 @@ void gameDraw(Player &player) {
 	WINDOW.clear(sf::Color(128, 128, 255));
 
 	// sorts all of the drawables based on height
-	std::sort(drawableVector.begin(), drawableVector.end(), [](const ObjDrawable& uno, const ObjDrawable& dos) {
+	std::stable_sort(drawableVector.begin(), drawableVector.end(), [](const ObjDrawable& uno, const ObjDrawable& dos) {
 		return uno.height < dos.height;
 	});
 	

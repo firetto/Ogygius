@@ -91,6 +91,9 @@ void guiSetup() {
 	mainMenuScreen.addButton("About", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5 + WINDOW_DIMENSIONS.y / 9), [] {
 		currentGUIScreen = &infoScreen;
 	});
+	mainMenuScreen.addButton("Exit", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5 + WINDOW_DIMENSIONS.y / 4.5), [] {
+		WINDOW.close();
+	});
 	
 	infoScreen.setTitleText("About Ogygius");
 	infoScreen.setBodyText("Ogygius is a survival adventure game, similar to Minecraft. To survive, you must craft weapons and tools and battle hostile creatures that will try to eat you. Keep hunger and thirst in mind. Build walls and structures to defend yourself from the creatures that the darkness brings. \n Game developed by: Anatoly Zavyalov, Jonathan Sumabat.");
@@ -98,7 +101,7 @@ void guiSetup() {
 		currentGUIScreen = &mainMenuScreen;
 	});
 
-	pauseMenuScreen.setTitleText("Game Paused");
+	pauseMenuScreen.setTitleText("Game Menu");
 	pauseMenuScreen.addButton("Resume Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2), [] {
 		GAME_PAUSED = false;
 		currentGUIScreen = &gameScreen;

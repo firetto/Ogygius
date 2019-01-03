@@ -106,7 +106,11 @@ public:
 			newAccelY = kbAmount * sin(angle*PI / 180);
 		}
 		mob.setAcceleration(sf::Vector2f(-newAccelX, -newAccelY));
+		mob.mobToRun = this;
+		mob.runFromPosition(getPosition());
 	}
+
+
 
 	static void spawnMob(Square &square) {
 		if (getChance(GAME_MOB_SPAWN_FREQUENCY) && mobVector.size() < GAME_MOB_MAX_COUNT) {
@@ -152,6 +156,8 @@ private:
 	float aiStateLengthMin = 2, aiStateLengthMax = 5;
 	sf::Clock aiClock;
 	float aiStateLength = getRandomFloat(aiStateLengthMin, aiStateLengthMax);
+	Mob *mobToRun;
+	bool runningTo = false;
 
 	enum AIState {
 		STATE_IDLE, STATE_WANDER, STATE_RUN,
@@ -175,27 +181,40 @@ private:
 		if (aiClock.getElapsedTime().asSeconds() >= aiStateLength) {
 			aiClock.restart();
 			aiStateLength = getRandomFloat(aiStateLengthMin, aiStateLengthMax);
-			aiState = AIState(getRandomInt(0, STATETYPE_SIZE));
+			aiState = AIState(getRandomInt(0, STATETYPE_SIZE-1));
 			rotation = toRotation;
 		}
 
 		else {
 			switch (aiState) {
 			case STATE_WANDER:	move(); break;
-			case STATE_RUN:		move(MOVE_SPEED * 2); break;
+			case STATE_RUN:		move(MOVE_SPEED * 3); break;
 			}
-			if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1) {
-				//headRotation = 
-				rotation = (int(toRotation) != int(rotation)) ? (toRotation - rotation)*(aiClock.getElapsedTime().asSeconds() - (aiStateLength - 1)) + rotation : toRotation;
-				//headRotation = rotation+180;
-			}
-			else if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1.5) {
-				int r = int(headRotation)-180;
-				headRotation = (int(toRotation) != r) ? ((toRotation - r)*2)*(aiClock.getElapsedTime().asSeconds()-(aiStateLength-1.5)) + headRotation: toRotation+180;
-			}	
-				
-			else toRotation = getRandomFloat(rotation - 85, rotation + 85);
+			if (aiState != STATE_RUN) {
+				if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1) {
+					//headRotation = 
+					rotation = (int(toRotation) != int(rotation)) ? (toRotation - rotation)*(aiClock.getElapsedTime().asSeconds() - (aiStateLength - 1)) + rotation : toRotation;
+					//headRotation = rotation+180;
+				}
+				else if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1.5) {
+					int r = int(headRotation) - 180;
+					headRotation = (int(toRotation) != r) ? ((toRotation - r) * 2)*(aiClock.getElapsedTime().asSeconds() - (aiStateLength - 1.5)) + headRotation : toRotation + 180;
+				}
 
+				else toRotation = getRandomFloat(rotation - 85, rotation + 85);
+			}
+			else {
+				float angle = getAngleBetweenPoints(getPosition(), mobToRun->getPosition());
+				if (runningTo) {
+					rotation = angle - 90;
+					headRotation = angle + 90;
+				}
+				else {
+					rotation = angle + 90;
+					headRotation = angle - 90;
+				}
+				toRotation = rotation;
+			}
 		}
 	}
 	void move() {
@@ -203,6 +222,24 @@ private:
 	}
 	void move(double speed) {
 		setAcceleration(sf::Vector2f(speed*sin(rotation*PI / 180), -speed * cos(rotation*PI / 180)));
+	}
+	void runFromPosition(sf::Vector2f position) {
+		float angle = getAngleBetweenPoints(getPosition(), position);
+		aiState = STATE_RUN;
+		rotation = angle+90;
+		headRotation = angle -90;
+		aiClock.restart();
+		aiStateLength = aiStateLengthMax;
+		runningTo = false;
+	}
+	void runToPosition(sf::Vector2f position) {
+		float angle = getAngleBetweenPoints(getPosition(), position);
+		aiState = STATE_RUN;
+		rotation = angle - 90;
+		headRotation = angle + 90;
+		aiClock.restart();
+		aiStateLength = aiStateLengthMax;
+		runningTo = true;
 	}
 	
 protected:

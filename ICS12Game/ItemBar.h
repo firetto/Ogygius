@@ -44,7 +44,7 @@ public:
 		outputInfo("Item bar has been loaded!");
 		selectItem(itemSelected);
 		addItem(Item(itemMap[ITEM_AXE]));
-		//addItem(Item(itemMap[ITEM_WALL_WOOD], 999999));
+		addItem(Item(itemMap[ITEM_WALL_WOOD], 999999));
 	}
 	void selectItem(int itemNo) {
 		item[itemSelected].isSelected = false;
