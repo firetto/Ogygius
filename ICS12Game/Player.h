@@ -15,8 +15,7 @@ public:
 		vis.setOrigin(vis.getGlobalBounds().width / 2, vis.getGlobalBounds().height / 2);
 		setPosition(sf::Vector2f(GAME_TOTAL_SIZE / 2, GAME_TOTAL_SIZE / 2));
 
-		view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
-		view.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
+		resetView();
 
 		// restarts the attack clock
 		attackClock.restart();
@@ -72,6 +71,12 @@ public:
 		isInWater();
 
 		lastFrameCollision = false;
+	}
+
+	void resetView() {
+		view.setViewport(sf::FloatRect(0, 0, 1.0f, 1.0f));
+		view.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
+		view.cameraZoom(float(defaultWindowDimension.y) / WINDOW_DIMENSIONS.y);
 	}
 
 	// get a hypotenuse based on player rotation

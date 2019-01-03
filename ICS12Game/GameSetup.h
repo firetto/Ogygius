@@ -25,6 +25,10 @@ public:
 		// declare mobs
 		declareMobs();
 
+		// setup overlay rects
+		setupOverlayRects();
+	}
+	void setupOverlayRects() {
 		pauseOverlayRect.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
 		pauseOverlayRect.setFillColor(sf::Color(0, 0, 0, 128));
 
@@ -75,21 +79,52 @@ void windowSetup() {
 	settings.antialiasingLevel = 8;
 
 	// create window
-	WINDOW.create(sf::VideoMode(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y), WINDOW_NAME, sf::Style::Close, settings);
+	if (isFullscreen) {
+		WINDOW_DIMENSIONS.x = sf::VideoMode::getDesktopMode().width;
+		WINDOW_DIMENSIONS.y = sf::VideoMode::getDesktopMode().height;
+		WINDOW.create(sf::VideoMode(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y), WINDOW_NAME, sf::Style::Fullscreen, settings);
+	}
 
-	// load font
-	fontLoad();
+	else {
+		WINDOW.create(sf::VideoMode(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y), WINDOW_NAME, sf::Style::Close, settings);
+	}
 }
 
+void guiSetup();
+void guiRefresh() {
+
+	mainMenuScreen.clear();
+	infoScreen.clear();
+	settingsScreen.clear();
+	pauseMenuScreen.clear();
+	map.clear();
+	gameScreen.clear();
+
+
+	guiSetup();
+	map.setupGUIScreen();
+}
+void updateResolution() {
+	windowSetup();
+	guiRefresh();
+	globalPlayer->resetView();
+	gameLoader.setupOverlayRects();
+}
 void guiSetup() {
 	mainMenuScreen.setTitleText("OGYGIUS", sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 3.5), 4);
-	mainMenuScreen.addButton("Play Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5), [] {
+	mainMenuScreen.addButton("Play Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.75), [] {
 		GAME_RUNNING = true;
 		gameLoader.gameLoad();
 		currentGUIScreen = &gameScreen;
 	});
-	mainMenuScreen.addButton("About", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5 + WINDOW_DIMENSIONS.y / 9), [] {
+	mainMenuScreen.addButton("About", sf::Vector2f(WINDOW_DIMENSIONS.x / 6 - 6, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 - WINDOW_DIMENSIONS.x / 12 - 3, WINDOW_DIMENSIONS.y / 1.75 + WINDOW_DIMENSIONS.y / 9), [] {
 		currentGUIScreen = &infoScreen;
+	});
+	mainMenuScreen.addButton("Settings", sf::Vector2f(WINDOW_DIMENSIONS.x / 6 - 6, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 12 + 3, WINDOW_DIMENSIONS.y / 1.75 + WINDOW_DIMENSIONS.y / 9), [] {
+		currentGUIScreen = &settingsScreen;
+	});
+	mainMenuScreen.addButton("Exit Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.75 + WINDOW_DIMENSIONS.y / 4.5), [] {
+		WINDOW.close();
 	});
 	
 	infoScreen.setTitleText("About Ogygius");
@@ -97,6 +132,33 @@ void guiSetup() {
 	infoScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
 		currentGUIScreen = &mainMenuScreen;
 	});
+
+	settingsScreen.setTitleText("Settings");
+	settingsScreen.addText("Screen Resolution", sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 4));
+	settingsScreen.addText(std::to_string(WINDOW_DIMENSIONS.x) + "x" + std::to_string(WINDOW_DIMENSIONS.y), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10));
+	settingsScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
+		currentGUIScreen = &mainMenuScreen;
+	});
+	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
+		currentWindowDimensionsPos--;
+		if (currentWindowDimensionsPos < 0) currentWindowDimensionsPos = windowDimensionsMap.size() - 1;
+		WINDOW_DIMENSIONS = windowDimensionsMap[currentWindowDimensionsPos];
+		updateResolution();
+		settingsScreen.getTextByNumber(1).setString(std::to_string(WINDOW_DIMENSIONS.x) + "x" + std::to_string(WINDOW_DIMENSIONS.y));
+		currentGUIScreen = &settingsScreen;
+	});
+	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
+		currentWindowDimensionsPos++;
+		if (currentWindowDimensionsPos >= windowDimensionsMap.size()) currentWindowDimensionsPos = 0;
+		WINDOW_DIMENSIONS = windowDimensionsMap[currentWindowDimensionsPos];
+		updateResolution();
+		settingsScreen.getTextByNumber(1).setString(std::to_string(WINDOW_DIMENSIONS.x) + "x" + std::to_string(WINDOW_DIMENSIONS.y));
+		currentGUIScreen = &settingsScreen;
+	});
+
+	settingsScreen.addText("Fullscreen", sf::Vector2f(WINDOW_DIMENSIONS.x / 3 - WINDOW_DIMENSIONS.x / 36, WINDOW_DIMENSIONS.y / 2), false);
+	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &isFullscreen);
+
 
 	pauseMenuScreen.setTitleText("Game Paused");
 	pauseMenuScreen.addButton("Resume Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2), [] {

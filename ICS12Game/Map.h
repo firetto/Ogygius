@@ -34,11 +34,14 @@ public:
 		view.setSize(sf::Vector2f(WINDOW_DIMENSIONS));
 		view.setCenter(sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2));
 
+		setupGUIScreen();
+
+	}
+	void setupGUIScreen() {
 		setTitleText("Game Map");
 		addButton("Close Map", sf::Vector2f(WINDOW_DIMENSIONS.x / 5, WINDOW_DIMENSIONS.y / 12), sf::Vector2f(WINDOW_DIMENSIONS.x * 0.875, WINDOW_DIMENSIONS.y * 0.95), [] {
 			GAME_MAP_OPEN = false;
 		});
-
 	}
 	void update(sf::Vector2f position) {
 		sf::Vector2i square = sf::Vector2i(position.x / GAME_SQUARE_SIZE, position.y / GAME_SQUARE_SIZE);

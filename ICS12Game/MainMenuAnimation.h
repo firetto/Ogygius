@@ -35,8 +35,8 @@ private:
 		float velocity;
 		int squareMinSize = WINDOW_DIMENSIONS.y / 3;
 		int squareSizeVariety = WINDOW_DIMENSIONS.y / 3;
-		int velocityMin = 3;
-		int velocityMax = 10;
+		int velocityMin = 1;
+		int velocityMax = 3;
 		int colorVariety = 100;
 		int alphaVariety = 128;
 		float rotationAmount;
