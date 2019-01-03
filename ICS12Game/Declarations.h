@@ -10,7 +10,23 @@
 
 #define RAD_TO_DEG PI/180
 
-sf::Vector2i WINDOW_DIMENSIONS = sf::Vector2i(1280, 720);
+std::map<int, sf::Vector2i> windowDimensionsMap{
+	{0, sf::Vector2i(800,600) },
+	{1, sf::Vector2i(1024, 768) },
+	{2, sf::Vector2i(1280, 720) },
+	{3, sf::Vector2i(1280, 800) },
+	{4, sf::Vector2i(1366, 768) },
+	{5, sf::Vector2i(1440, 900) },
+	{6, sf::Vector2i(1600, 900) },
+	{7, sf::Vector2i(1680, 1050) },
+	{8, sf::Vector2i(1920, 1080) },
+};
+int currentWindowDimensionsPos = 6;
+sf::Vector2i defaultWindowDimension = windowDimensionsMap[currentWindowDimensionsPos];
+
+bool isFullscreen = false, wasFullscreen = isFullscreen;
+
+sf::Vector2i WINDOW_DIMENSIONS = defaultWindowDimension;
 
 const std::string WINDOW_NAME = "Ogygius";
 
@@ -84,3 +100,5 @@ void outputError(std::string str) {
 void outputInfo(std::string str) {
 	std::cout << "INFO: " << str << "\n";
 }
+
+

@@ -124,7 +124,7 @@ Button::Button(std::string label, sf::Vector2f dimensions, sf::Vector2f position
 	m_text.setLineSpacing(0);
 
 	// set origin for text
-	m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getGlobalBounds().height / 2 + m_text.getCharacterSize()*(1.0/7));
+	m_text.setOrigin(m_text.getGlobalBounds().width / 2, m_text.getCharacterSize() / 2 + m_text.getCharacterSize()*(1.0/7));
 
 	// set button dimensions
 	m_boundary.setSize(dimensions);
@@ -172,123 +172,78 @@ void Button::update() {
 }
 
 //// CHECKMARK ////
-/*
+
 class Checkmark : public GUIElement {
 public:
 	// setup the button
 	Checkmark() {}
-	Checkmark(sf::Vector2f dimensions, sf::Vector2f position, bool boolean, std::string hoverLabel);
+	Checkmark(int width, sf::Vector2f position, bool * boolean);
 
 	// update the button, place after window.draw()
-	void update(bool &boolean);
+	void update();
+
+	// draw
+	void draw();
 
 private:
-	// size multiplier when hovering
-	float size_hoverMultiplier = 1.15;
-
-	// how long it takes for the hover to zoom in
-	float hoverTime = 0.2;
-
-	// clock for hovering
-	sf::Clock clock;
-
-	// final multiplier
-	double hoverMultiplier, prevHoverMultiplier;
-
-	// has finished hover zoom
-	bool finishedHoverZoom = false;
-
-	bool justHovered = false, justReleased = false, isEnabled = false;
+	sf::RectangleShape insideRect;
+	float outlineThicknessFactor = 0.2;
+	bool isEnabled = false;
+	bool *boolToHold;
 };
 
-Checkmark::Checkmark(sf::Vector2f dimensions, sf::Vector2f position, bool boolean, std::string hoverLabel) {
-
-	// set vis sprite texture
-	m_vis.setTexture(checkmarkTexture);
+Checkmark::Checkmark(int width, sf::Vector2f position, bool * boolean) {
 
 	// set button dimensions
-	m_boundary.setSize(dimensions);
-	m_height = dimensions.y; m_width = dimensions.x;
+	m_boundary.setSize(sf::Vector2f(width*(1.0-outlineThicknessFactor), width*(1.0 - outlineThicknessFactor)));
 
 	// set origin for button boundary
 	m_boundary.setOrigin(m_boundary.getSize().x / 2, m_boundary.getSize().y / 2);
 
-	// set vis for button
-	m_vis.setOrigin(m_vis.getGlobalBounds().width / 2, m_vis.getGlobalBounds().height / 2);
+	m_boundary.setOutlineThickness(width*outlineThicknessFactor);
+	m_boundary.setOutlineColor(sf::Color::White);
+
+	m_boundary.setFillColor(sf::Color::Transparent);
 
 	// set position for button boundary
-	m_boundary.setPosition(position.x - m_width / 2, position.y);
+	m_boundary.setPosition(position);
 
-	// set position for button sprite
-	m_vis.setPosition(position);
+	insideRect.setSize(sf::Vector2f(width*(1.0 - outlineThicknessFactor * 3), width*(1.0 - outlineThicknessFactor * 3)));
+	insideRect.setOrigin(insideRect.getSize().x / 2, insideRect.getSize().y / 2);
+	insideRect.setFillColor(sf::Color::White);
+	insideRect.setPosition(position);
 
-	isEnabled = boolean;
+	boolToHold = boolean;
+	isEnabled = *boolToHold;
+	
+	std::cout << isEnabled << std::endl;
 
-	if (isEnabled) {
-		m_vis.setTextureRect(sf::IntRect(16, 0, 16, 16));
-	}
-	else {
-		m_vis.setTextureRect(sf::IntRect(0, 0, 16, 16));
-	}
-
-	// set sprite fill
-	m_spriteFillEnabled = true;
-
-	// sprite fill
-	m_spriteFill();
+	if (isEnabled) insideRect.setFillColor(sf::Color::White);
+	else insideRect.setFillColor(sf::Color::Transparent);
 }
 
-void Checkmark::update(bool &boolean) {
-	// if button is hovered by mouse
+void Checkmark::update() {
 	if (m_isHover()) {
-		if (justReleased) {
-			finishedHoverZoom = false;
-			justReleased = false;
-			clock.restart();
-			prevHoverMultiplier = hoverMultiplier;
-		}
-		if (clock.getElapsedTime().asSeconds() <= hoverTime && !finishedHoverZoom) hoverMultiplier = (size_hoverMultiplier - prevHoverMultiplier) * pow(1 / hoverTime, 2) * pow(clock.getElapsedTime().asSeconds(), 2) + prevHoverMultiplier;
-		else if (clock.getElapsedTime().asSeconds() > hoverTime) {
-			hoverMultiplier = size_hoverMultiplier;
-			clock.restart();
-			finishedHoverZoom = true;
-		}
-		// set scale of text when hovering
-		if (m_isClick()) {
-			if (isEnabled) {
-				isEnabled = false;
-				boolean = false;
+		if (hasClicked) {
+			m_boundary.setFillColor(sf::Color(60, 60, 60));
+			if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == 0) {
+				isEnabled = !isEnabled;
+				*boolToHold = isEnabled;
+				if (isEnabled) insideRect.setFillColor(sf::Color::White);
+				else insideRect.setFillColor(sf::Color::Transparent);
+				hasClicked = false;
+				std::cout << isFullscreen << std::endl;
 			}
-			else {
-				isEnabled = true;
-				boolean = true;
-			}
-			playVitalSound(buttonPressBuff);
 		}
-		justHovered = true;
-	}
-	else {
-		if (justHovered) {
-			finishedHoverZoom = false;
-			justHovered = false;
-			prevHoverMultiplier = hoverMultiplier;
-			clock.restart();
+		else {
+			m_boundary.setFillColor(sf::Color(30, 30, 30));
+			m_isClick();
 		}
-		if (clock.getElapsedTime().asSeconds() <= hoverTime && !finishedHoverZoom) hoverMultiplier = -((prevHoverMultiplier - 1) * 100) * pow(1 / hoverTime, 2) * pow(clock.getElapsedTime().asSeconds(), 2) + prevHoverMultiplier;
-		else if (clock.getElapsedTime().asSeconds() > hoverTime) {
-			hoverMultiplier = 1;
-			clock.restart();
-			finishedHoverZoom = true;
-		}
-		if (hoverMultiplier < 1) hoverMultiplier = 1;
-		if (hoverMultiplier > size_hoverMultiplier) hoverMultiplier = size_hoverMultiplier;
-		justReleased = true;
 	}
-	if (isEnabled) {
-		m_vis.setTextureRect(sf::IntRect(16, 0, 16, 16));
-	}
-	else {
-		m_vis.setTextureRect(sf::IntRect(0, 0, 16, 16));
-	}
-	m_draw();
-}*/
+	else m_boundary.setFillColor(sf::Color::Transparent);
+}
+
+void Checkmark::draw() {
+	WINDOW.draw(m_boundary);
+	WINDOW.draw(insideRect);
+}

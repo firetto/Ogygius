@@ -23,8 +23,3 @@ private:
 	BiomeType type;
 	sf::Vector2f index;
 };
-
-void generateSquares() {
-	// creates squares
-	
-}
