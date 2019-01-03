@@ -91,5 +91,6 @@ sf::Color BiomeColor[6] = {
 enum MobType {
 	MOB_COW,
 
+
 	MOBTYPE_COUNT // used to track the number of mobs
 };
