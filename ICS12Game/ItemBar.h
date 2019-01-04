@@ -32,6 +32,7 @@ public:
 		bar.setSize(sf::Vector2f(gridSize*size, gridSize));
 		bar.setFillColor(sf::Color(0, 0, 0, 20));
 		bar.setOrigin(size * (gridSize / 2), 0);
+		bar.setPosition(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y - bar.getSize().y - 16);
 		for (int i = 0; i < barSize; i++) {
 			item.push_back(ItemSection());
 			item.back().square.setSize(sf::Vector2f(gridSize, gridSize));
@@ -53,7 +54,7 @@ public:
 	}
 	Item &getItemSelected() { return item[itemSelected].itm; }
 	void update() {
-		bar.setPosition(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y - bar.getSize().y  - 16);
+		
 		for (int i = 0; i < barSize; i++) {
 			if (item[i].isSelected) {
 				item[i].square.setFillColor(sf::Color(100, 100, 100, 150));

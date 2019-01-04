@@ -32,6 +32,7 @@ const int GAME_RENDER_DISTANCE = sqrt(pow(WINDOW.getSize().x / 2, 2) + pow(WINDO
 int GAME_VIEW_LEFTCHUNK, GAME_VIEW_RIGHTCHUNK, GAME_VIEW_TOPCHUNK, GAME_VIEW_BOTCHUNK;
 const double GAME_WATER_SLOW_AMOUNT = 0.75; // multiplier
 const int GAME_MOB_MAX_COUNT = 20;
+const int GAME_PLAYER_DEFAULT_HEALTH = 10;
 const float GAME_DAY_LENGTH = 100; // seconds, set to 600 for 10 minutes 
 sf::RectangleShape dayOverlayRect; // rectangle that is an overlay for the screen, becomes darker if it's night.
 bool MOUSE_IN_HUD = false;
@@ -93,7 +94,7 @@ sf::Color BiomeColor[6] = {
 enum MobType {
 	MOB_COW,
 
-	MOB_MOUSE,
+	MOB_MOUSE, MOB_MOUSE_ANGRY,
 
 	MOBTYPE_COUNT // used to track the number of mobs
 };

@@ -22,7 +22,7 @@ public:
 			vis.setTextureRect(sf::IntRect(0, 0, 96, 192));
 			head.setTextureRect(sf::IntRect(0, 192, 96, 96));
 			break;
-		case MOB_MOUSE:
+		case MOB_MOUSE: case MOB_MOUSE_ANGRY:
 			vis.setTextureRect(sf::IntRect(0, 0, 72, 192));
 			head.setTextureRect(sf::IntRect(0, 192, 72, 96));
 			break;
@@ -39,15 +39,18 @@ public:
 	void subtractHealth(int _health) {
 		health -= _health;
 	}
+	int getHealth() { return health; }
 	void setMoveSpeed(float newMoveSpeed) {
 		MOVE_SPEED = newMoveSpeed;
 	}
 	void setType(MobType t) {
 		type = t;
 	}
+	void setDamage(int d) {
+		damage = d;
+	}
 	void setSpawnRate(int spawnRateDenomin) {
 		spawnRateDenominator = spawnRateDenomin;
-		std::cout << "Denom. of " << type << " set to " << spawnRateDenominator << std::endl;
 	}
 	void setHostility(bool h) {
 		isHostile = h;
@@ -68,6 +71,25 @@ public:
 		aiStuff();
 		if (health < 1) isDeleted = true;
 		drawableVector.push_back(ObjDrawable(head, height + 0.1));
+
+		if (type == MOB_MOUSE && !isDay) {
+			sf::Vector2f pos = getPosition();
+			float rot = getRotation();
+			float headRot = headRotation;
+			*this = Mob(MOB_MOUSE_ANGRY);
+			setPosition(pos);
+			rotation = rot;
+			headRotation = headRot;
+		}
+		else if (type == MOB_MOUSE_ANGRY && isDay) {
+			sf::Vector2f pos = getPosition();
+			float rot = getRotation();
+			float headRot = headRotation;
+			*this = Mob(MOB_MOUSE);
+			setPosition(pos);
+			rotation = rot;
+			headRotation = headRot;
+		}
 	}
 	sf::Vector2i getCurrChunk() { return currChunk; }
 	sf::Vector2i getCurrSquare() { return currSquare; }
@@ -76,7 +98,7 @@ public:
 		return rotation;
 	}
 
-	void checkCollision(Collidable &collidable) {
+	bool checkCollision(Collidable &collidable) {
 		if (collidable.isCollidable && Collision::PixelPerfectTest(vis, collidable.vis, 254)) {
 			float kbAmount = (canMove && collidable.canMove) ? GAME_ENTITY_BOUNCE_AMOUNT / 2 : GAME_ENTITY_BOUNCE_AMOUNT;
 			// get angle between collidable and the player
@@ -107,8 +129,9 @@ public:
 			//setVelocity(sf::Vector2f(0, 0));
 			if (canMove) setAcceleration(sf::Vector2f(newAccelX, newAccelY));
 			if (collidable.canMove) collidable.setAcceleration(sf::Vector2f(-newAccelX, -newAccelY));
-
+			return true;
 		}
+		return false;
 	}
 
 	void attackMob(Mob &mob, int damage) {
@@ -134,7 +157,22 @@ public:
 		mob.runFromPosition(getPosition());
 	}
 
-
+	void chaseMob(Mob &mob) {
+		if (getDistanceBetweenPoints(getPosition(), mob.getPosition()) <= 500) {
+			mobToRun = &mob;
+			runningTo = true;
+			runToPosition(mob.getPosition());
+			if (checkCollision(mob)) {
+				if (!hasAttacked) {
+					attackMob(mob, damage);
+					hasAttacked = true;
+				}
+			}
+			else {
+				hasAttacked = false;
+			}
+		}
+	}
 
 	static void spawnMob(Square &square) {
 		for (int i = 0; i < mobMap.size(); i++) {
@@ -145,7 +183,6 @@ public:
 					if (square.getType() == biome) {
 						mobVector.push_back(Mob(mobMap[i].type));
 						mobVector.back().setPosition(square.ground.getPosition());
-						std::cout << mobMap[i].type << ", " << mobMap[i].spawnRateDenominator << std::endl;
 						done = true;
 					}
 				}
@@ -178,6 +215,8 @@ public:
 			}
 		}
 	}
+
+	bool isHostile = false;
 private:
 	MobType type;
 	sf::Sprite head;
@@ -273,7 +312,6 @@ private:
 		aiStateLength = aiStateLengthMax;
 		runningTo = true;
 	}
-
 protected:
 	void setCurrChunk() {
 		currChunk = sf::Vector2i(getPosition().x / GAME_CHUNK_SIZE, getPosition().y / GAME_CHUNK_SIZE);
@@ -293,13 +331,15 @@ protected:
 
 	int health;
 
+	int damage;
+
 	float MOVE_SPEED;
 
 	int spawnRateDenominator;
 
 	std::vector<BiomeType> spawnBiomes;
 
-	bool isHostile = false;
+	bool hasAttacked = false;
 
 	// rotation of mob
 	float rotation = 0;
@@ -310,7 +350,7 @@ void declareMobs() {
 		mobMap[i].setType(MobType(i));
 	}
 
-	BiomeType t[2] = {BIOME_GRASSLANDS, BIOME_FOREST};
+	BiomeType t[2] = { BIOME_GRASSLANDS, BIOME_FOREST };
 	mobMap[MOB_COW].setHealth(10);
 	mobMap[MOB_COW].setMoveSpeed(0.3);
 	mobMap[MOB_COW].setSpawnRate(100000);
@@ -321,5 +361,9 @@ void declareMobs() {
 	mobMap[MOB_MOUSE].setMoveSpeed(0.4);
 	mobMap[MOB_MOUSE].setSpawnRate(75000);
 	mobMap[MOB_MOUSE].setSpawnBiomes(t2);
-	mobMap[MOB_MOUSE].setHostility(true);
+	
+	mobMap[MOB_MOUSE_ANGRY].setHealth(15);
+	mobMap[MOB_MOUSE_ANGRY].setMoveSpeed(0.5);
+	mobMap[MOB_MOUSE_ANGRY].setHostility(true);
+	mobMap[MOB_MOUSE_ANGRY].setDamage(1);
 }

@@ -27,6 +27,7 @@ public:
 		// set collision sprite for fists
 		weaponCollisionSprite.setTexture(anim_fistTex);
 		canMove = true;
+		setHealth(GAME_PLAYER_DEFAULT_HEALTH);
 	}
 
 	// update the player physics, etc.
@@ -52,9 +53,6 @@ public:
 
 		// handle clocks
 		handleClocks();
-
-		// update the itembar
-		items.update();
 
 		// update player boundaries
 		playerBoundaries();
@@ -141,6 +139,7 @@ public:
 			if (items.getItemSelected().isTool) items.getItemSelected().durability--;
 			isAttacking = false;
 		}
+		if (mob.isHostile) mob.chaseMob(*this);
 	}
 
 	// reset the player

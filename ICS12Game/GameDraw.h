@@ -5,6 +5,7 @@
 #include "Square.h"
 #include "DayCycle.h"
 #include "Map.h"
+#include "GameHUD.h"
 void gameDraw(Player &player) {
 	// clears everything that is on the window (color blue for sea)
 	WINDOW.clear(sf::Color(128, 128, 255));
@@ -45,8 +46,7 @@ void gameDraw(Player &player) {
 	else {
 		if (GAME_MAP_OPEN) map.draw();
 		else {
-			// draws player itembar
-			player.items.draw();
+			gameHUD.draw();
 
 			// draw crafting hud
 			craftHUD.draw();
