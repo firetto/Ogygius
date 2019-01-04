@@ -8,7 +8,7 @@ class Mob;
 
 std::map<int, Mob> mobMap;
 std::vector<Mob> mobVector;
-class Mob : virtual public Entity, public Collidable{
+class Mob : virtual public Entity, public Collidable {
 public:
 	Mob() { height = 5; }
 	Mob(MobType _type) {
@@ -17,8 +17,17 @@ public:
 		height = 5;
 		vis.setTexture(mobTextureMap[type]);
 		head.setTexture(mobTextureMap[type]);
-		vis.setTextureRect(sf::IntRect(0, 0, 96, 192));
-		head.setTextureRect(sf::IntRect(0, 192, 96, 96));
+		switch (type) {
+		case MOB_COW:
+			vis.setTextureRect(sf::IntRect(0, 0, 96, 192));
+			head.setTextureRect(sf::IntRect(0, 192, 96, 96));
+			break;
+		case MOB_MOUSE:
+			vis.setTextureRect(sf::IntRect(0, 0, 72, 192));
+			head.setTextureRect(sf::IntRect(0, 192, 72, 96));
+			break;
+		}
+
 		vis.setOrigin(getMiddle(vis));
 
 		head.setOrigin(getMiddle(head));
@@ -33,12 +42,27 @@ public:
 	void setMoveSpeed(float newMoveSpeed) {
 		MOVE_SPEED = newMoveSpeed;
 	}
+	void setType(MobType t) {
+		type = t;
+	}
+	void setSpawnRate(int spawnRateDenomin) {
+		spawnRateDenominator = spawnRateDenomin;
+		std::cout << "Denom. of " << type << " set to " << spawnRateDenominator << std::endl;
+	}
+	void setHostility(bool h) {
+		isHostile = h;
+	}
+	void setSpawnBiomes(BiomeType biomes[]) {
+		for (int i = 0; i < sizeof(biomes) / sizeof(biomes[0]); i++) {
+			spawnBiomes.push_back(biomes[i]);
+		}
+	}
 	void update() {
 		physics();
 		isInWater();
 		draw();
 		setCurrChunk();
-		head.setPosition(sf::Vector2f(getPosition().x + _head_from_middle_amount*(sin(rotation * PI/180)), getPosition().y - _head_from_middle_amount*cos(rotation * PI/180)));
+		head.setPosition(sf::Vector2f(getPosition().x + _head_from_middle_amount * (sin(rotation * PI / 180)), getPosition().y - _head_from_middle_amount * cos(rotation * PI / 180)));
 		head.setRotation(headRotation);
 		vis.setRotation(rotation);
 		aiStuff();
@@ -113,19 +137,27 @@ public:
 
 
 	static void spawnMob(Square &square) {
-		if (getChance(GAME_MOB_SPAWN_FREQUENCY) && mobVector.size() < GAME_MOB_MAX_COUNT) {
-			switch (square.getType()) {
-			case BIOME_GRASSLANDS:
-				mobVector.push_back(Mob(MOB_COW));
-				mobVector.back().setPosition(square.ground.getPosition()); break;
+		for (int i = 0; i < mobMap.size(); i++) {
+			if (getChance(mobMap[i].spawnRateDenominator) && mobVector.size() < GAME_MOB_MAX_COUNT) {
+				bool done = false;
+				for (BiomeType &biome : mobMap[i].spawnBiomes) {
+					if (done) break;
+					if (square.getType() == biome) {
+						mobVector.push_back(Mob(mobMap[i].type));
+						mobVector.back().setPosition(square.ground.getPosition());
+						std::cout << mobMap[i].type << ", " << mobMap[i].spawnRateDenominator << std::endl;
+						done = true;
+					}
+				}
 			}
 		}
+
 	}
-	
+
 	// initial mob spawn
 	static void spawnMob(int denominator, sf::IntRect chunks) {
-		for (int i = chunks.left-1; i < chunks.width; i++) {
-			for (int a = chunks.top-1; a < chunks.height; a++) {
+		for (int i = chunks.left - 1; i < chunks.width; i++) {
+			for (int a = chunks.top - 1; a < chunks.height; a++) {
 				bool placed = false; int amount = getRandomInt(1, 5);
 				for (std::vector<Square> squares : chunkVector[a][i].squareVector) {
 					if (placed) break;
@@ -181,7 +213,7 @@ private:
 		if (aiClock.getElapsedTime().asSeconds() >= aiStateLength) {
 			aiClock.restart();
 			aiStateLength = getRandomFloat(aiStateLengthMin, aiStateLengthMax);
-			aiState = AIState(getRandomInt(0, STATETYPE_SIZE-1));
+			aiState = AIState(getRandomInt(0, STATETYPE_SIZE - 1));
 			rotation = toRotation;
 		}
 
@@ -226,8 +258,8 @@ private:
 	void runFromPosition(sf::Vector2f position) {
 		float angle = getAngleBetweenPoints(getPosition(), position);
 		aiState = STATE_RUN;
-		rotation = angle+90;
-		headRotation = angle -90;
+		rotation = angle + 90;
+		headRotation = angle - 90;
 		aiClock.restart();
 		aiStateLength = aiStateLengthMax;
 		runningTo = false;
@@ -241,7 +273,7 @@ private:
 		aiStateLength = aiStateLengthMax;
 		runningTo = true;
 	}
-	
+
 protected:
 	void setCurrChunk() {
 		currChunk = sf::Vector2i(getPosition().x / GAME_CHUNK_SIZE, getPosition().y / GAME_CHUNK_SIZE);
@@ -250,7 +282,7 @@ protected:
 			((getPosition().x - (GAME_CHUNK_SIZE * currChunk.x))) / GAME_SQUARE_SIZE,
 			((getPosition().y - (GAME_CHUNK_SIZE * currChunk.y))) / GAME_SQUARE_SIZE);
 
-		
+
 	}
 
 	void isInWater() {
@@ -263,13 +295,31 @@ protected:
 
 	float MOVE_SPEED;
 
+	int spawnRateDenominator;
+
+	std::vector<BiomeType> spawnBiomes;
+
+	bool isHostile = false;
+
 	// rotation of mob
 	float rotation = 0;
 };
 void declareMobs() {
-	for (int i = 0; i < MOBTYPE_COUNT - 1; i++) {
+	for (int i = 0; i < MOBTYPE_COUNT; i++) {
 		mobMap.insert(std::pair<int, Mob>(i, Mob(MobType(i))));
+		mobMap[i].setType(MobType(i));
 	}
+
+	BiomeType t[2] = {BIOME_GRASSLANDS, BIOME_FOREST};
 	mobMap[MOB_COW].setHealth(10);
 	mobMap[MOB_COW].setMoveSpeed(0.3);
+	mobMap[MOB_COW].setSpawnRate(100000);
+	mobMap[MOB_COW].setSpawnBiomes(t);
+
+	BiomeType t2[4] = { BIOME_GRASSLANDS, BIOME_FOREST, BIOME_SAVANNAH, BIOME_DESERT };
+	mobMap[MOB_MOUSE].setHealth(10);
+	mobMap[MOB_MOUSE].setMoveSpeed(0.4);
+	mobMap[MOB_MOUSE].setSpawnRate(75000);
+	mobMap[MOB_MOUSE].setSpawnBiomes(t2);
+	mobMap[MOB_MOUSE].setHostility(true);
 }

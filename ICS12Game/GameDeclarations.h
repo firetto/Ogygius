@@ -16,6 +16,9 @@ const float GAME_FRICTION = 1.25;
 // a debug mode that shows a bunch of values for debugging, as well as hitboxes of objects
 bool GAME_DEBUG_MODE = true;
 
+// whether it is day
+bool isDay = true;
+
 // how much entities bounce
 const float GAME_ENTITY_BOUNCE_AMOUNT = 1.75;
 
@@ -28,7 +31,6 @@ const int GAME_TOTAL_SIZE = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_CHUNK_SIZE;
 const int GAME_RENDER_DISTANCE = sqrt(pow(WINDOW.getSize().x / 2, 2) + pow(WINDOW.getSize().y / 2, 2));
 int GAME_VIEW_LEFTCHUNK, GAME_VIEW_RIGHTCHUNK, GAME_VIEW_TOPCHUNK, GAME_VIEW_BOTCHUNK;
 const double GAME_WATER_SLOW_AMOUNT = 0.75; // multiplier
-const int GAME_MOB_SPAWN_FREQUENCY = 100000; // denominator
 const int GAME_MOB_MAX_COUNT = 20;
 const float GAME_DAY_LENGTH = 100; // seconds, set to 600 for 10 minutes 
 sf::RectangleShape dayOverlayRect; // rectangle that is an overlay for the screen, becomes darker if it's night.
@@ -91,6 +93,7 @@ sf::Color BiomeColor[6] = {
 enum MobType {
 	MOB_COW,
 
+	MOB_MOUSE,
 
 	MOBTYPE_COUNT // used to track the number of mobs
 };

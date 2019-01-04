@@ -5,7 +5,6 @@
 
 sf::Clock dayClock;
 int daysElapsed = 0;
-bool isDay = true;
 int rectAlpha = 0;
 int rectMaxAlpha = 155;
 

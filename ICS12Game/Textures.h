@@ -102,10 +102,9 @@ void textureLoad() {
 		mobTextureMap.insert(std::pair<int, sf::Texture>(i, sf::Texture()));
 	}
 	mobTextureDirectoryMap[MOB_COW] = "textures/mobs/cow.png";
+	mobTextureDirectoryMap[MOB_MOUSE] = "textures/mobs/mouse.png";
 
 	for (int i = 0; i < MOBTYPE_COUNT; i++) loadTexture(mobTextureMap[i], mobTextureDirectoryMap[i]);
-
-	
 }
 
 void fontLoad() {

@@ -43,6 +43,5 @@ private:
 	};
 	std::vector<Square> squareVector;
 	sf::Clock clock;
-	
 };
 MainMenuAnimation mainMenuAnimation;

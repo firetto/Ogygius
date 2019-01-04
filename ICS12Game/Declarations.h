@@ -69,6 +69,7 @@ bool getRandomBool() {
 
 // returns a probability based on a denominator (denominator of 2 means 50%, of 5 means 20%, etc.)
 bool getChance(float denominator) {
+	if (denominator == -1) return false;
 	if (getRandomInt(0, int(denominator)) == 0) return true;
 	return false;
 }
