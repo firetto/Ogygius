@@ -15,6 +15,8 @@ sf::Texture hud_craftingTex;
 
 sf::Texture lootOutlineTex;
 
+sf::Texture cursorTex; sf::Sprite cursor;
+
 // a list of breakable textures
 std::map<int, sf::Texture> breakableTextureMap;
 
@@ -46,6 +48,10 @@ void loadTexture(sf::Texture &texture, std::string directory) {
 }
 // this function loads all of the textures from the directories into the texture variables
 void textureLoad() {
+	loadTexture(cursorTex, "textures/cursor.png");
+	cursor.setTexture(cursorTex);
+	cursor.setOrigin(cursor.getGlobalBounds().width / 2, cursor.getGlobalBounds().height / 2);
+
 	// sets player texture
 	loadTexture(playerTex, "textures/playerBody.png");
 

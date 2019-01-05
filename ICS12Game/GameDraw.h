@@ -53,6 +53,11 @@ void gameDraw(Player &player) {
 	}
 
 	currentGUIScreen->update();
+
+	// draw cursor
+	cursor.setPosition(sf::Vector2f(sf::Mouse::getPosition(WINDOW)));
+	WINDOW.draw(cursor);
+
 	// displays everything that was drawn to the window
 	WINDOW.display();
 }

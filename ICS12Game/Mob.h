@@ -188,14 +188,13 @@ public:
 				}
 			}
 		}
-
 	}
 
 	// initial mob spawn
 	static void spawnMob(int denominator, sf::IntRect chunks) {
 		for (int i = chunks.left - 1; i < chunks.width; i++) {
 			for (int a = chunks.top - 1; a < chunks.height; a++) {
-				bool placed = false; int amount = getRandomInt(1, 5);
+				bool placed = false; int amount = getRandomInt(1, 5);		
 				for (std::vector<Square> squares : chunkVector[a][i].squareVector) {
 					if (placed) break;
 					for (Square square : squares) {

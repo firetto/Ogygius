@@ -9,9 +9,6 @@
 class GameLoader {
 public:
 	void gameSetup() {
-		
-		// load all of the textures
-		textureLoad();
 
 		// load items
 		itemMapFill();
@@ -95,6 +92,7 @@ void windowSetup() {
 	else {
 		WINDOW.create(sf::VideoMode(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y), WINDOW_NAME, sf::Style::Close, settings);
 	}
+	WINDOW.setMouseCursorVisible(false);
 }
 
 void guiSetup();

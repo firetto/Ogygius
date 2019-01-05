@@ -20,15 +20,16 @@ public:
 	}
 	void update() {
 		player->items.update();
+		for (int i = 0; i < player->getHealth(); i++) {
+			hpBoxes[i].setPosition(player->items.bar.getPosition().x - player->items.bar.getSize().x / 2 + (i*hpBox.getSize().x*1.33), player->items.bar.getPosition().y - player->items.gridSize * 0.75);
+		}
 	}
 	void eventUpdate() {
 		player->items.eventUpdateBar();
 	}
 	void draw() {
 		player->items.draw();
-		for (int i = 0; i < player->getHealth(); i++) {
-			WINDOW.draw(hpBoxes[i]);
-		}
+		for (int i = 0; i < player->getHealth(); i++) WINDOW.draw(hpBoxes[i]);
 	}
 private:
 	sf::RectangleShape hpBox;

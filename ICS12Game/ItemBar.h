@@ -54,7 +54,7 @@ public:
 	}
 	Item &getItemSelected() { return item[itemSelected].itm; }
 	void update() {
-		
+		bar.setPosition(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y - bar.getSize().y - 16);
 		for (int i = 0; i < barSize; i++) {
 			if (item[i].isSelected) {
 				item[i].square.setFillColor(sf::Color(100, 100, 100, 150));
