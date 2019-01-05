@@ -73,6 +73,13 @@ void pauseGame() {
 	GAME_MAP_OPEN = false;
 	currentGUIScreen = (GAME_PAUSED) ? &pauseMenuScreen : &gameScreen;
 }
+void exitGame() {
+	GAME_RUNNING = false;
+	GAME_PAUSED = false;
+	mobVector.clear();
+	globalPlayer->reset();
+	currentGUIScreen = &mainMenuScreen;
+}
 void windowSetup() {
 	// set antialias level of window
 	sf::ContextSettings settings;
@@ -159,18 +166,23 @@ void guiSetup() {
 	settingsScreen.addText("Fullscreen", sf::Vector2f(WINDOW_DIMENSIONS.x / 3 - WINDOW_DIMENSIONS.x / 36, WINDOW_DIMENSIONS.y / 2), false);
 	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &isFullscreen);
 
-
 	pauseMenuScreen.setTitleText("Game Paused");
 	pauseMenuScreen.addButton("Resume Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2), [] {
 		GAME_PAUSED = false;
 		currentGUIScreen = &gameScreen;
 	});
 	pauseMenuScreen.addButton("Exit Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 2 + WINDOW_DIMENSIONS.y / 8), [] {
-		GAME_RUNNING = false;
-		GAME_PAUSED = false;
-		mobVector.clear();
-		globalPlayer->reset();
-		currentGUIScreen = &mainMenuScreen;
+		exitGame();
+	});
+
+	deadScreen.setTitleText("YOU ARE DEAD", 2);
+	deadScreen.addButton("Restart Game", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5), [] {
+		GAME_RUNNING = true;
+		gameLoader.gameLoad();
+		currentGUIScreen = &gameScreen;
+	});
+	deadScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5 + WINDOW_DIMENSIONS.y / 8), [] {
+		exitGame();
 	});
 	currentGUIScreen = &mainMenuScreen;
 }

@@ -5,7 +5,7 @@
 #include "GameHUD.h"
 // main function that updates the entire game
 void gameUpdate(Player &player) {
-	player.update();
+	if (!player.isDead) player.update();
 	gameHUD.update();
 	processDayCycle();
 	for (int i = 0; i < dropItemVector.size(); i++) {

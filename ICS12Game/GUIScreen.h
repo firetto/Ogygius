@@ -99,3 +99,4 @@ GUIScreen pauseMenuScreen;
 GUIScreen gameScreen;
 GUIScreen infoScreen;
 GUIScreen settingsScreen;
+GUIScreen deadScreen;

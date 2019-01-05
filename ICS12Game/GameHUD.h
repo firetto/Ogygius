@@ -9,9 +9,9 @@ public:
 	GameHUD(Player &p) {
 		player = &p;
 		hpBox.setSize(sf::Vector2f(player->items.gridSize / 2.5, player->items.gridSize / 2.5));
-		hpBox.setFillColor(sf::Color(255, 0, 0, 200));
+		hpBox.setFillColor(sf::Color(255, 32, 32, 200));
 		hpBox.setOutlineThickness(2);
-		hpBox.setOutlineColor(sf::Color(128, 128, 128, 200));
+		hpBox.setOutlineColor(sf::Color(64, 64, 64, 200));
 		std::cout << "aaa" << player->getHealth() << std::endl;
 		for (int i = 0; i < player->getHealth(); i++) {
 			hpBoxes.push_back(hpBox);

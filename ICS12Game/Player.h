@@ -4,6 +4,7 @@
 #include "AnimationDeclaration.h"
 #include "ItemBar.h"
 #include "Mob.h"
+#include "GUIScreen.h"
 
 class Player : public Mob {
 public:
@@ -28,6 +29,7 @@ public:
 		weaponCollisionSprite.setTexture(anim_fistTex);
 		canMove = true;
 		setHealth(GAME_PLAYER_DEFAULT_HEALTH);
+		isDead = false;
 	}
 
 	// update the player physics, etc.
@@ -69,6 +71,12 @@ public:
 		isInWater();
 
 		lastFrameCollision = false;
+
+		if (health <= 0) {
+			isDead = true;
+			currentGUIScreen = &deadScreen;
+			GAME_PAUSED = true;
+		}
 	}
 
 	void resetView() {
@@ -97,6 +105,7 @@ public:
 
 	// draw the player 
 	void draw() {
+		if (isDead) return;
 		drawableVector.emplace_back(ObjDrawable(weaponCollisionSprite, height - 0.01));
 		Object::draw();
 		if (isPlacing) drawableVector.emplace_back(ObjDrawable(placeSprite, 1000));
@@ -150,8 +159,9 @@ public:
 		attackReady = true;
 		handsFlipped = false;
 		rotation = 0;
+		isDead = false;
 	}
-
+	bool isDead = false;
 	// return player view
 	Camera &getView() { return view; }
 

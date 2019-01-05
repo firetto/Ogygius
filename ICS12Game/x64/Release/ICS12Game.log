@@ -168,59 +168,6 @@ c:\users\azsza\documents\github\ics12game\ics12game\mob.h(320): warning C4244: '
           ]
 c:\users\azsza\documents\github\ics12game\ics12game\mob.h(355): warning C4305: 'argument': truncation from 'double' to 'float'
 c:\users\azsza\documents\github\ics12game\ics12game\mob.h(361): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(182): warning C4305: 'argument': truncation from 'double' to 'float'
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(16): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(95): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(100): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(123): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(227): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(281): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(295): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(294): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(296): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-          and
-          [
-              T=int
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(297): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-          and
-          [
-              T=int
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\player.h(298): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\worldgeneration.h(15): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
 c:\users\azsza\documents\github\ics12game\ics12game\gui.h(69): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
           with
           [
@@ -268,6 +215,59 @@ c:\users\azsza\documents\github\ics12game\ics12game\guiscreen.h(47): warning C42
               T=float
           ]
 c:\users\azsza\documents\github\ics12game\ics12game\guiscreen.h(57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(192): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(17): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(103): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(109): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(132): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(237): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(291): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(305): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(304): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(306): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(307): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+          and
+          [
+              T=int
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\player.h(308): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\worldgeneration.h(15): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
 c:\users\azsza\documents\github\ics12game\ics12game\map.h(9): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
           with
           [
@@ -336,72 +336,52 @@ c:\users\azsza\documents\github\ics12game\ics12game\map.h(155): warning C4244: '
           ]
 c:\users\azsza\documents\github\ics12game\ics12game\map.h(156): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(62): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(114): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(121): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(114): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(121): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(115): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(122): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(115): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(122): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(120): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(127): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(120): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(127): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(123): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(130): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(123): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(130): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(126): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(133): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(126): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(132): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(132): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(137): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(138): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(133): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
@@ -416,33 +396,73 @@ c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(139): warning C4
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(142): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(144): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(144): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(150): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(145): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(159): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(146): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(160): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(146): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(164): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(149): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(168): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(151): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(157): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(166): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(167): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(170): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(174): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(179): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(179): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(184): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+c:\users\azsza\documents\github\ics12game\ics12game\gamesetup.h(184): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
@@ -474,7 +494,7 @@ c:\users\azsza\documents\github\ics12game\ics12game\mainmenuanimation.h(27): war
           ]
 c:\users\azsza\documents\github\ics12game\ics12game\mainmenuanimation.h(29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating code
-  2 of 3555 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 3565 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code

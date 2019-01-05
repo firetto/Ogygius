@@ -217,6 +217,7 @@ public:
 	}
 
 	bool isHostile = false;
+	bool isDead = false;
 private:
 	MobType type;
 	sf::Sprite head;

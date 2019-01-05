@@ -41,7 +41,6 @@ void gameDraw(Player &player) {
 	WINDOW.draw(dayOverlayRect);
 	if (GAME_PAUSED) {
 		WINDOW.draw(pauseOverlayRect);
-		pauseMenuScreen.update();
 	}
 	else {
 		if (GAME_MAP_OPEN) map.draw();
