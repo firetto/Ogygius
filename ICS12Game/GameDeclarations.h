@@ -62,6 +62,8 @@ enum ItemType {
 
 	ITEM_WALL_WOOD,
 
+	ITEM_MEAT,
+
 	ITEMTYPE_COUNT // this is used to track the amount of items
 };
 

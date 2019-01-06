@@ -69,7 +69,10 @@ public:
 		head.setRotation(headRotation);
 		vis.setRotation(rotation);
 		aiStuff();
-		if (health < 1) isDeleted = true;
+		if (health < 1 && !isDeleted) {
+			isDeleted = true;
+			if (type == MOB_COW) spawnItem(Item(itemMap[ITEM_MEAT], 1), getPosition(), sf::Vector2f(0, 0));
+		}
 		drawableVector.push_back(ObjDrawable(head, height + 0.1));
 
 		if (type == MOB_MOUSE && !isDay) {

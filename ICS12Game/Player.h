@@ -67,6 +67,8 @@ public:
 
 		placeBreakables();
 
+		useItem();
+
 		isInWater();
 
 		lastFrameCollision = false;
@@ -293,7 +295,17 @@ private:
 		}
 	}
 
-	
+	void useItem() {
+		if (items.getItemSelected().isUsable) {
+			if ((sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right && GAME_CLICK_DELAY_PASSED)) {
+				int healAmount = items.getItemSelected().healAmount;
+				if (health < 10) {
+					health = (health + healAmount > 10) ? 10 : health + healAmount;
+					items.subtractItems(items.getItemLocation(items.getItemSelected()), 1);
+				}
+			}
+		}
+	}
 
 	void placeBreakables() {
 		if (items.getItemSelected().placeType != BREAKABLE_NONE) {

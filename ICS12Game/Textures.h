@@ -98,6 +98,7 @@ void textureLoad() {
 	itemTextureDirectoryMap[ITEM_PICKAXE] = "textures/drops/pick.png";
 	itemTextureDirectoryMap[ITEM_CRAFT_STATION] = "textures/drops/crafting_station.png";
 	itemTextureDirectoryMap[ITEM_WALL_WOOD] = "textures/drops/fence.png";
+	itemTextureDirectoryMap[ITEM_MEAT] = "textures/drops/meat.png";
 
 	for (int i = 0; i < itemTextureMap.size(); i++) {
 		loadTexture(itemTextureMap[i], itemTextureDirectoryMap[i]);

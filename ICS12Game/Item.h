@@ -6,6 +6,7 @@
 #include <map>
 #include "Declarations.h"
 #include "Camera.h"
+#include "Item.h"
 #include <sstream>
 
 class Item {
@@ -17,6 +18,8 @@ public:
 	int amount = 1;
 	int damage = 1;
 	int durability, MAX_DURABILITY;
+	bool isUsable = false;
+	int healAmount = 0;
 	float modifier = 1;
 	bool isTool = false;
 	Item() {}
@@ -37,6 +40,7 @@ std::map<int, Item> itemMap{
 { 8, Item() }, // stick
 { 9, Item() }, // iron ingot
 { 10, Item() }, // iron ore
+{ 11, Item() }, // meat
 };
 
 void itemMapFill() {
@@ -74,6 +78,10 @@ void itemMapFill() {
 
 	itemMap[ITEM_WALL_WOOD].name = "Wooden Fence";
 	itemMap[ITEM_WALL_WOOD].placeType = BREAKABLE_WALL_WOOD;
+
+	itemMap[ITEM_MEAT].name = "Meat";
+	itemMap[ITEM_MEAT].isUsable = true;
+	itemMap[ITEM_MEAT].healAmount = 1;
 
 	for (int i = 1; i < itemMap.size(); i++) {
 		itemMap[i].durability = itemMap[i].MAX_DURABILITY;
