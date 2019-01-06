@@ -4,6 +4,7 @@
 #include "AnimationDeclaration.h"
 #include "Map.h"
 #include "GUIScreen.h"
+#include "DayCycle.h"
 #include <SFML/Graphics.hpp>
 
 class GameLoader {
@@ -42,13 +43,19 @@ public:
 		// setup craft hud
 		craftHUD = CraftingHUD();
 
+		mobVector.clear();
+		resetDay();
+
 		// spawn some mobs
 		Mob::spawnMob(10, sf::IntRect(int(GAME_CHUNKS_PER_WORLD_AMOUNT.x / 2) - 2, int(GAME_CHUNKS_PER_WORLD_AMOUNT.y / 2) - 2, 4, 4));
+
+		globalPlayer->reset();
 
 		// generate map
 		map = GameMap();
 		currentGUIScreen = &gameScreen;
 		WINDOW.clear();
+
 	}
 private:
 	sf::Text gameLoadText;
@@ -104,7 +111,6 @@ void guiRefresh() {
 	pauseMenuScreen.clear();
 	map.clear();
 	gameScreen.clear();
-
 
 	guiSetup();
 	map.setupGUIScreen();
@@ -178,6 +184,7 @@ void guiSetup() {
 		GAME_RUNNING = true;
 		gameLoader.gameLoad();
 		currentGUIScreen = &gameScreen;
+		GAME_PAUSED = false;
 	});
 	deadScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.5 + WINDOW_DIMENSIONS.y / 8), [] {
 		exitGame();

@@ -8,7 +8,10 @@ int daysElapsed = 0;
 int rectAlpha = 0;
 int rectMaxAlpha = 155;
 
-
+void resetDay() {
+	isDay = true;
+	dayClock.restart();
+}
 void processDayCycle() {
 	dayOverlayRect.setFillColor(sf::Color(0, 0, 50, rectAlpha));
 	if (dayClock.getElapsedTime().asSeconds() > GAME_DAY_LENGTH) {

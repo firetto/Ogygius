@@ -34,7 +34,6 @@ public:
 
 	// update the player physics, etc.
 	void update() {
-
 		// update controls
 		controls();
 
@@ -160,8 +159,8 @@ public:
 		handsFlipped = false;
 		rotation = 0;
 		isDead = false;
+		health = GAME_PLAYER_DEFAULT_HEALTH;
 	}
-	bool isDead = false;
 	// return player view
 	Camera &getView() { return view; }
 
