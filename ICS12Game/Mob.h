@@ -336,10 +336,10 @@ protected:
 		else inWater = false;
 	}
 	void releaseParticles() {
-		if (particleClock.getElapsedTime().asSeconds() > 0.25 && int(getVelocity().x) != 0 && int(getVelocity().y) != 0) {
+		if (particleClock.getElapsedTime().asSeconds() > 0.25 && (int(getVelocity().x) != 0 || int(getVelocity().y) != 0)) {
 			sf::Color currBiomeColor = chunkVector[getCurrChunk().y][getCurrChunk().x].squareVector[getCurrSquare().y][getCurrSquare().x].ground.getFillColor();
 			currBiomeColor = sf::Color(currBiomeColor.r * 0.85, currBiomeColor.g * 0.85, currBiomeColor.b * 0.85);
-			Particle::spawnParticles(currBiomeColor, std::max(abs(getVelocity().x), abs(getVelocity().y)), 0.75, getPosition());
+			Particle::spawnParticles(currBiomeColor, std::fmax(fabs(getVelocity().x), fabs(getVelocity().y)), 0.75, getPosition());
 			particleClock.restart();
 		}
 	}
