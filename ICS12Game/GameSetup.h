@@ -44,6 +44,7 @@ public:
 		craftHUD = CraftingHUD();
 
 		mobVector.clear();
+		dropItemVector.clear();
 		resetDay();
 
 		// spawn some mobs

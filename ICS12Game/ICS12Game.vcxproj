@@ -174,6 +174,7 @@
     <ClInclude Include="MainMenuAnimation.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mob.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Square.h" />
     <ClInclude Include="CollidableObject.h" />
     <ClInclude Include="Collision.h" />

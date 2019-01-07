@@ -3,11 +3,13 @@
 #include "DayCycle.h"
 #include "Map.h"
 #include "GameHUD.h"
+#include "Particle.h"
 // main function that updates the entire game
 void gameUpdate(Player &player) {
 	if (!player.isDead) player.update();
 	gameHUD.update();
 	processDayCycle();
+	Particle::updateParticles();
 	for (int i = 0; i < dropItemVector.size(); i++) {
 		dropItemVector[i].dropItemPhysics();
 		if (Collision::PixelPerfectTest(dropItemVector[i].outline, player.vis) && !dropItemVector[i].isDeleted && dropItemVector[i].canPickUp) {
