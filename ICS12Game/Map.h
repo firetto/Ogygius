@@ -18,7 +18,6 @@ public:
 				scale = size / float(GAME_SQUARE_SIZE);
 				squares.back().back().rect.setSize(sf::Vector2f(size, size));
 				squares.back().back().rect.setPosition(WINDOW_DIMENSIONS.x / 2 - size * width / 2 + a * size, WINDOW_DIMENSIONS.y / 2 - size * height / 2 + i * size);
-				squares.back().back().obj.setPosition(squares.back().back().rect.getPosition().x + size / 2, squares.back().back().rect.getPosition().y + size / 2);
 			}
 		}
 		screenOverlay.setFillColor(sf::Color(0, 0, 0, 128));
@@ -52,14 +51,9 @@ public:
 		playerPosition.setPosition(squares[0][0].rect.getPosition().x + position.x*scale, position.y*scale);
 		for (int i = topSquare; i < botSquare; i++) {
 			for (int a = leftSquare; a < rightSquare; a++) {
-				sf::Vector2i chunk(a / GAME_SQUARE_PER_CHUNK_AMOUNT.x, i / GAME_SQUARE_PER_CHUNK_AMOUNT.y);
-				sf::Vector2i square(a%int(GAME_SQUARE_PER_CHUNK_AMOUNT.x), i%int(GAME_SQUARE_PER_CHUNK_AMOUNT.y));
 				if (squares[i][a].type == BIOME_NONE) {
-					squares[i][a].type = chunkVector[chunk.y][chunk.x].squareVector[square.y][square.x].getType();
+					squares[i][a].type = squareVector[square.y+(i-square.y)][square.x+(a-square.x)].getType();
 					squares[i][a].rect.setFillColor(BiomeColor[squares[i][a].type]);
-					squares[i][a].obj.setTexture(*chunkVector[chunk.y][chunk.x].squareVector[square.y][square.x].obj.vis.getTexture());
-					squares[i][a].obj.setOrigin(squares[i][a].obj.getGlobalBounds().width / 2, squares[i][a].obj.getGlobalBounds().height / 2);
-					squares[i][a].obj.setScale(scale/3, scale/3);
 					if (farthestTop == -1 || i < farthestTop) farthestTop = i;
 					if (farthestBot == -1 || i > farthestBot) farthestBot = i;
 					if (farthestLeft == -1 || a < farthestLeft) farthestLeft = a;
@@ -136,7 +130,6 @@ public:
 			for (int a = farthestLeft; a < farthestRight; a++) {
 				if (squares[i][a].type != BIOME_NONE && view.inView(squares[i][a].rect.getGlobalBounds())) {
 					WINDOW.draw(squares[i][a].rect);
-					//WINDOW.draw(squares[i][a].obj);
 				}
 			}
 		}
@@ -149,7 +142,6 @@ private:
 	struct GameMapSquare {
 		BiomeType type;
 		sf::RectangleShape rect;
-		sf::Sprite obj;
 	};
 	void updatePlayerPositionRect() {
 		playerPosition.setSize(sf::Vector2f(playerPositionSize.x*view.getCameraZoom(), playerPositionSize.y*view.getCameraZoom()));

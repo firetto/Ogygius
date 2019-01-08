@@ -60,11 +60,17 @@ public:
 			spawnBiomes.push_back(biomes[i]);
 		}
 	}
+	bool isRightBiome(Square &s) {
+		for (BiomeType &b : spawnBiomes) {
+			if (s.getType() == b) return true;
+		}
+		return false;
+	}
 	void update() {
 		physics();
 		isInWater();
 		draw();
-		setCurrChunk();
+		setCurrSquare();
 		head.setPosition(sf::Vector2f(getPosition().x + _head_from_middle_amount * (sin(rotation * PI / 180)), getPosition().y - _head_from_middle_amount * cos(rotation * PI / 180)));
 		head.setRotation(headRotation);
 		vis.setRotation(rotation);
@@ -186,6 +192,7 @@ public:
 					if (square.getType() == biome) {
 						mobVector.push_back(Mob(mobMap[i].type));
 						mobVector.back().setPosition(square.ground.getPosition());
+						std::cout << "Spawned mob " << mobMap[i].type << " at " << square.ground.getPosition().x << ", " << square.ground.getPosition().y << std::endl;
 						done = true;
 					}
 				}
@@ -195,27 +202,50 @@ public:
 
 	// initial mob spawn
 	static void spawnMob(int denominator, sf::IntRect chunks) {
-		for (int i = chunks.left - 1; i < chunks.width; i++) {
-			for (int a = chunks.top - 1; a < chunks.height; a++) {
-				bool placed = false; int amount = getRandomInt(1, 5);		
-				for (std::vector<Square> squares : chunkVector[a][i].squareVector) {
-					if (placed) break;
-					for (Square square : squares) {
-						if (placed) break;
-						if (getChance(denominator*GAME_SQUARE_PER_CHUNK_AMOUNT.x*GAME_SQUARE_PER_CHUNK_AMOUNT.y)) {
-							switch (square.getType()) {
-							case BIOME_GRASSLANDS: case BIOME_FOREST:
-								for (int b = 0; b < amount; b++) {
-									mobVector.push_back(Mob(MOB_COW));
-									mobVector.back().setPosition(square.ground.getPosition()); break;
-								}
-							}
-							placed = true;
-						}
+		int squareLeft = chunks.left * GAME_SQUARE_PER_CHUNK_AMOUNT.x, squareRight = squareLeft + chunks.width * GAME_SQUARE_PER_CHUNK_AMOUNT.x,
+			squareTop = chunks.top * GAME_SQUARE_PER_CHUNK_AMOUNT.y, squareBot = squareTop + chunks.height * GAME_SQUARE_PER_CHUNK_AMOUNT.y;
+		
+		int amount = getRandomInt(5, 20);
+		std::cout << squareLeft << ", " << squareRight << ", " << squareTop << ", " << squareBot << " | " << amount << std::endl;
+		for (int i = 0; i < amount; i++) {
+			bool rightBiome = false; int mobType = -1;
+			sf::Vector2i pos;
+			
+			for (int i = 0; !rightBiome && i < 10; i++) {
+				pos = sf::Vector2i(getRandomInt(squareLeft, squareRight), getRandomInt(squareTop, squareBot));
+				for (int a = 0; a < mobMap.size(); a++) {
+					if (mobMap[a].isRightBiome(squareVector[pos.y][pos.x])) {
+						mobType = a;
+						rightBiome = true;
+						break;
 					}
 				}
 			}
+			if (mobType < 0) return;
+			Square *square = &squareVector[pos.y][pos.x];
+			mobVector.push_back(Mob(MobType(mobType)));
+			std::cout << "Spawned mob at " << pos.x << ", " << pos.y << std::endl;
+			mobVector.back().setPosition(square->ground.getPosition());
 		}
+		/*
+		for (int i = squareLeft - 1; i < squareRight; i++) {
+			for (int a = squareTop - 1; a < squareBot; a++) {
+				if (placed) break;
+				Square *square = &squareVector[a][i];
+				switch (square->getType()) {
+				case BIOME_GRASSLANDS: case BIOME_FOREST:
+					for (int b = 0; b < amount; b++) {
+						mobVector.push_back(Mob(MOB_COW));
+						std::cout << "Spawned cow at " << a << ", " << i << std::endl;
+						mobVector.back().setPosition(square->ground.getPosition()); break;
+					}
+				}
+				placed = true;
+				if (getChance(denominator)) {
+					
+				}
+			}
+		}*/
 	}
 
 	bool isHostile = false;
@@ -316,19 +346,15 @@ private:
 		runningTo = true;
 	}
 protected:
-	void setCurrChunk() {
-		currChunk = sf::Vector2i(getPosition().x / GAME_CHUNK_SIZE, getPosition().y / GAME_CHUNK_SIZE);
-
+	void setCurrSquare() {
 		currSquare = sf::Vector2i(
-			((getPosition().x - (GAME_CHUNK_SIZE * currChunk.x))) / GAME_SQUARE_SIZE,
-			((getPosition().y - (GAME_CHUNK_SIZE * currChunk.y))) / GAME_SQUARE_SIZE);
-
-
+			getPosition().x / GAME_SQUARE_SIZE,
+			getPosition().y / GAME_SQUARE_SIZE);
 	}
 
 	void isInWater() {
 		if (getPosition().x <= GAME_TOTAL_SIZE - 10 && Entity::getPosition().y <= GAME_TOTAL_SIZE - 10 &&
-			chunkVector[currChunk.y][currChunk.x].squareVector[currSquare.y][currSquare.x].getType() == BIOME_WATER) inWater = true;
+			squareVector[currSquare.y][currSquare.x].getType() == BIOME_WATER) inWater = true;
 		else inWater = false;
 	}
 

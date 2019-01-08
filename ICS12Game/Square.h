@@ -23,3 +23,4 @@ private:
 	BiomeType type;
 	sf::Vector2f index;
 };
+std::vector<std::vector<Square>>squareVector;

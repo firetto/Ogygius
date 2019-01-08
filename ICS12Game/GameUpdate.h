@@ -26,22 +26,17 @@ void gameUpdate(Player &player) {
 		if (mobVector[i].isDeleted) mobVector.erase(mobVector.begin() + i);
 	}
 
-	for (int q = GAME_VIEW_TOPCHUNK; q <= GAME_VIEW_BOTCHUNK; q++) {
-		for (int w = GAME_VIEW_LEFTCHUNK; w <= GAME_VIEW_RIGHTCHUNK; w++) {
-			for (auto &rows : chunkVector[q][w].squareVector) {
-				for (Square &square : rows) {
-					if (square.getType() == BIOME_GRASSLANDS && getDistanceBetweenPoints(player.getPosition(), square.ground.getPosition()) > GAME_RENDER_DISTANCE) Mob::spawnMob(square);
-					if (getDistanceBetweenPoints(player.getPosition(), square.obj.getPosition()) < GAME_RENDER_DISTANCE + std::max(square.obj.vis.getGlobalBounds().height / 2, square.obj.vis.getGlobalBounds().width / 2)) {
-						square.obj.update();
-						player.attackBreakables(square.obj);
-						player.checkCollision(square.obj);
-					}
-					for (Mob &mob : mobVector) mob.checkCollision(square.obj);
-				}
+	for (int y = GAME_VIEW_TOPSQUARE; y <= GAME_VIEW_BOTSQUARE; y++) {
+		for (int x = GAME_VIEW_LEFTSQUARE; x <= GAME_VIEW_RIGHTSQUARE; x++) {
+			Square *s = &squareVector[y][x];
+			if (getDistanceBetweenPoints(player.getPosition(), s->ground.getPosition()) > GAME_RENDER_DISTANCE) Mob::spawnMob(*s);
+			if (getDistanceBetweenPoints(player.getPosition(), s->obj.getPosition()) < GAME_RENDER_DISTANCE + std::max(s->obj.vis.getGlobalBounds().height / 2, s->obj.vis.getGlobalBounds().width / 2)) {
+				s->obj.update();
+				player.attackBreakables(s->obj);
+				player.checkCollision(s->obj);
 			}
+			for (Mob &mob : mobVector) mob.checkCollision(s->obj);
 		}
 	}
-	map.update(sf::Vector2f(
-		(player.getCurrChunk().x * GAME_SQUARE_PER_CHUNK_AMOUNT.x + player.getCurrSquare().x)*GAME_SQUARE_SIZE + int(player.getPosition().x) % GAME_SQUARE_SIZE, 
-		(player.getCurrChunk().y * GAME_SQUARE_PER_CHUNK_AMOUNT.y + player.getCurrSquare().y)*GAME_SQUARE_SIZE + int(player.getPosition().y) % GAME_SQUARE_SIZE));
+	map.update(player.getPosition());
 }

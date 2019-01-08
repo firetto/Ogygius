@@ -18,17 +18,13 @@ void gameDraw(Player &player) {
 	// sets camera view
 	WINDOW.setView(player.getView());
 	WINDOW.draw(ground);
-	GAME_VIEW_LEFTCHUNK = player.getCurrChunk().x - 1; if (GAME_VIEW_LEFTCHUNK < 0) GAME_VIEW_LEFTCHUNK = 0;
-	GAME_VIEW_RIGHTCHUNK = player.getCurrChunk().x + 1; if (GAME_VIEW_RIGHTCHUNK >= GAME_CHUNKS_PER_WORLD_AMOUNT.x) GAME_VIEW_RIGHTCHUNK = GAME_CHUNKS_PER_WORLD_AMOUNT.x - 1;
-	GAME_VIEW_TOPCHUNK = player.getCurrChunk().y - 1; if (GAME_VIEW_TOPCHUNK < 0) GAME_VIEW_TOPCHUNK = 0;
-	GAME_VIEW_BOTCHUNK = player.getCurrChunk().y + 1; if (GAME_VIEW_BOTCHUNK >= GAME_CHUNKS_PER_WORLD_AMOUNT.y) GAME_VIEW_BOTCHUNK = GAME_CHUNKS_PER_WORLD_AMOUNT.y - 1;
-	for (int q = GAME_VIEW_TOPCHUNK; q <= GAME_VIEW_BOTCHUNK; q++) {
-		for (int w = GAME_VIEW_LEFTCHUNK; w <= GAME_VIEW_RIGHTCHUNK; w++) {
-			for (int i = 0; i < chunkVector[q][w].squareVector.size(); i++) {
-				for (int a = 0; a < chunkVector[q][w].squareVector[i].size(); a++) {
-					if (player.getView().inView(chunkVector[q][w].squareVector[i][a].ground.getGlobalBounds())) WINDOW.draw(chunkVector[q][w].squareVector[i][a].ground);
-				}
-			}
+	GAME_VIEW_LEFTSQUARE = player.getCurrSquare().x - player.getView().getSize().x / 2 / GAME_SQUARE_SIZE-1;
+	GAME_VIEW_RIGHTSQUARE = player.getCurrSquare().x + player.getView().getSize().x / 2 / GAME_SQUARE_SIZE+2;
+	GAME_VIEW_TOPSQUARE = player.getCurrSquare().y - player.getView().getSize().y / 2 / GAME_SQUARE_SIZE-1;
+	GAME_VIEW_BOTSQUARE = player.getCurrSquare().y + player.getView().getSize().y / 2 / GAME_SQUARE_SIZE+2;
+	for (int h = GAME_VIEW_TOPSQUARE; h <= GAME_VIEW_BOTSQUARE; h++) {
+		for (int w = GAME_VIEW_LEFTSQUARE; w <= GAME_VIEW_RIGHTSQUARE; w++) {
+			WINDOW.draw(squareVector[h][w].ground);
 		}
 	}
 	

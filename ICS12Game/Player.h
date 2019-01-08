@@ -61,7 +61,7 @@ public:
 		// if dropping item, drop item
 		dropItem();
 
-		setCurrChunk();
+		setCurrSquare();
 
 		draw();
 
@@ -223,6 +223,7 @@ private:
 			attackReady = false;
 			isAttacking = true;
 		}
+		if (keyboard.press(sf::Keyboard::B)) std::cout << "Player current square: " << getCurrSquare().x << ", " << getCurrSquare().y << std::endl;
 	}
 	
 	// rotates player based on mouse position on screen
@@ -314,8 +315,7 @@ private:
 			sf::Vector2f pos = sf::Vector2f(
 				int((getPosition().x + getFacing().x * 150) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2,
 				int((getPosition().y + getFacing().y * 150) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2);
-			sf::Vector2i chunkIndx = sf::Vector2i(pos.x / GAME_CHUNK_SIZE, pos.y / GAME_CHUNK_SIZE),
-				squareIndx = sf::Vector2i((pos.x - (chunkIndx.x*GAME_CHUNK_SIZE)) / GAME_SQUARE_SIZE, (pos.y - (chunkIndx.y*GAME_CHUNK_SIZE)) / GAME_SQUARE_SIZE);
+			sf::Vector2i squareIndx = sf::Vector2i(pos.x / GAME_SQUARE_SIZE, pos.y / GAME_SQUARE_SIZE);
 			float rot = round(getRotation() / 22.5) * 22.5;
 
 			placeSprite = sf::Sprite(breakableTextureMap[items.getItemSelected().placeType]);
@@ -323,13 +323,13 @@ private:
 			placeSprite.setRotation(rot);
 			placeSprite.setPosition(pos);
 
-			if (chunkVector[chunkIndx.y][chunkIndx.x].squareVector[squareIndx.y][squareIndx.x].obj.type == BREAKABLE_NONE &&
-				chunkVector[chunkIndx.y][chunkIndx.x].squareVector[squareIndx.y][squareIndx.x].getType() != BIOME_WATER) {
+			if (squareVector[squareIndx.y][squareIndx.x].obj.type == BREAKABLE_NONE &&
+				squareVector[squareIndx.y][squareIndx.x].getType() != BIOME_WATER) {
 				placeSprite.setColor(sf::Color(255, 255, 255, 64));
 				if ((sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right && GAME_CLICK_DELAY_PASSED)) {
-					chunkVector[chunkIndx.y][chunkIndx.x].squareVector[squareIndx.y][squareIndx.x].obj = Breakable(items.getItemSelected().placeType);
-					chunkVector[chunkIndx.y][chunkIndx.x].squareVector[squareIndx.y][squareIndx.x].obj.setPosition(pos);
-					chunkVector[chunkIndx.y][chunkIndx.x].squareVector[squareIndx.y][squareIndx.x].obj.vis.setRotation(rot);
+					squareVector[squareIndx.y][squareIndx.x].obj = Breakable(items.getItemSelected().placeType);
+					squareVector[squareIndx.y][squareIndx.x].obj.setPosition(pos);
+					squareVector[squareIndx.y][squareIndx.x].obj.vis.setRotation(rot);
 					items.subtractItems(items.getItemLocation(items.getItemSelected()), 1);
 					GAME_CLICK_DELAY_PASSED = false;
 				}
