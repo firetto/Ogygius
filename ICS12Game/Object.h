@@ -6,6 +6,7 @@
 0 - ground
 1 - grass
 2 - droppables
+4.5 - particles
 3 - rocks, logs, etc
 4 - fence
 5-mob

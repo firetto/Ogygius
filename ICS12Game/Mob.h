@@ -3,6 +3,7 @@
 #include "DroppedItem.h" 
 #include "Chunk.h"
 #include "Collision.h"
+#include "Particle.h"
 
 class Mob;
 
@@ -75,10 +76,8 @@ public:
 		head.setRotation(headRotation);
 		vis.setRotation(rotation);
 		aiStuff();
-		if (health < 1 && !isDeleted) {
-			isDeleted = true;
-			if (type == MOB_COW) spawnItem(Item(itemMap[ITEM_MEAT], 1), getPosition(), sf::Vector2f(0, 0));
-		}
+		releaseParticles();
+
 		drawableVector.push_back(ObjDrawable(head, height + 0.1));
 
 		if (type == MOB_MOUSE && !isDay) {
@@ -98,6 +97,11 @@ public:
 			setPosition(pos);
 			rotation = rot;
 			headRotation = headRot;
+		}
+		if (health < 1 && !isDeleted) {
+			isDeleted = true;
+			if (type == MOB_COW) spawnItem(Item(itemMap[ITEM_MEAT], 1), getPosition(), sf::Vector2f(0, 0));
+			Particle::spawnParticles(sf::Color(128, 128, 128), 10, getPosition());
 		}
 	}
 	sf::Vector2i getCurrChunk() { return currChunk; }
@@ -258,7 +262,7 @@ private:
 	float headRotation = 180 + rotation;
 	float toRotation;
 	float aiStateLengthMin = 2, aiStateLengthMax = 5;
-	sf::Clock aiClock;
+	sf::Clock aiClock, particleClock;
 	float aiStateLength = getRandomFloat(aiStateLengthMin, aiStateLengthMax);
 	Mob *mobToRun;
 	bool runningTo = false;
@@ -357,7 +361,14 @@ protected:
 			squareVector[currSquare.y][currSquare.x].getType() == BIOME_WATER) inWater = true;
 		else inWater = false;
 	}
-
+	void releaseParticles() {
+		if (particleClock.getElapsedTime().asSeconds() > 0.25 && (int(getVelocity().x) != 0 || int(getVelocity().y) != 0)) {
+			sf::Color currBiomeColor = chunkVector[getCurrChunk().y][getCurrChunk().x].squareVector[getCurrSquare().y][getCurrSquare().x].ground.getFillColor();
+			currBiomeColor = sf::Color(currBiomeColor.r * 0.85, currBiomeColor.g * 0.85, currBiomeColor.b * 0.85);
+			Particle::spawnParticles(currBiomeColor, std::fmax(fabs(getVelocity().x), fabs(getVelocity().y)), 0.75, getPosition());
+			particleClock.restart();
+		}
+	}
 	int health;
 
 	int damage;

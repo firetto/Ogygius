@@ -17,6 +17,8 @@ sf::Texture lootOutlineTex;
 
 sf::Texture cursorTex; sf::Sprite cursor;
 
+sf::Texture particleTex;
+
 // a list of breakable textures
 std::map<int, sf::Texture> breakableTextureMap;
 
@@ -64,6 +66,8 @@ void textureLoad() {
 	loadTexture(hud_craftingTex, "textures/HUD_craft.png");
 
 	loadTexture(lootOutlineTex, "textures/lootsquare.png");
+
+	loadTexture(particleTex, "textures/particle.png");
 
 	// load number of textures for breakables
 	for (int i = 0; i < BREAKABLETYPE_COUNT; i++) {

@@ -71,6 +71,8 @@ public:
 
 		isInWater();
 
+		releaseParticles();
+
 		lastFrameCollision = false;
 
 		if (health <= 0) {
@@ -78,6 +80,8 @@ public:
 			currentGUIScreen = &deadScreen;
 			GAME_PAUSED = true;
 		}
+
+
 	}
 
 	void resetView() {
@@ -338,7 +342,7 @@ private:
 		}
 		else isPlacing = false;
 	}
-
+	
 	
 };
 Player *globalPlayer; // a player variable to be accessed basically only by the lambda functions in GameSetup...
