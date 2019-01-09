@@ -54,6 +54,7 @@ public:
 
 		// generate map
 		map = GameMap();
+		if (GAME_MAP_REVEAL_ALL) map.revealAll();
 		currentGUIScreen = &gameScreen;
 		WINDOW.clear();
 

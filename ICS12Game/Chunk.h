@@ -31,7 +31,7 @@ private:
 		if (squares[y][x].getType() == BIOME_NONE && !squares[y][x].found) {
 			squares[y][x].found = true;
 			BiomeType type;
-			int ifWater = 125, ifGround = 100;
+			int ifWater = 200, ifGround = 100;
 			if (index.x == 0 && index.y == 0)
 				type = (desiredType == BIOME_NONE || getChance((desiredType == BIOME_WATER) ? ifWater : ifGround)) ? BiomeType(getRandomInt(1, int(BIOMETYPE_COUNT))) : desiredType;
 			else if (y == 0 && index.y > 0) {

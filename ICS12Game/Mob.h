@@ -71,7 +71,6 @@ public:
 		physics();
 		isInWater();
 		draw();
-		setCurrSquare();
 		head.setPosition(sf::Vector2f(getPosition().x + _head_from_middle_amount * (sin(rotation * PI / 180)), getPosition().y - _head_from_middle_amount * cos(rotation * PI / 180)));
 		head.setRotation(headRotation);
 		vis.setRotation(rotation);
@@ -104,8 +103,15 @@ public:
 			Particle::spawnParticles(sf::Color(128, 128, 128), 10, getPosition());
 		}
 	}
-	sf::Vector2i getCurrChunk() { return currChunk; }
-	sf::Vector2i getCurrSquare() { return currSquare; }
+	sf::Vector2i getCurrSquare() { 
+		sf::Vector2i currSquare(getPosition().x / GAME_SQUARE_SIZE,
+			getPosition().y / GAME_SQUARE_SIZE);
+		if (currSquare.x < 0) currSquare.x = 0; 
+		if (currSquare.x >= GAME_SQUARES_PER_WORLD_AMOUNT.x) currSquare.x = GAME_SQUARES_PER_WORLD_AMOUNT.x - 1;
+		if (currSquare.y < 0) currSquare.y = 0; 
+		if (currSquare.y >= GAME_SQUARES_PER_WORLD_AMOUNT.y) currSquare.y = GAME_SQUARES_PER_WORLD_AMOUNT.y - 1;
+		return currSquare;
+	}
 	// returns rotation (in degrees)
 	double getRotation() {
 		return rotation;
@@ -257,7 +263,6 @@ public:
 private:
 	MobType type;
 	sf::Sprite head;
-	sf::Vector2i currChunk, currSquare;
 	float _head_from_middle_amount = 64;
 	float headRotation = 180 + rotation;
 	float toRotation;
@@ -350,22 +355,30 @@ private:
 		runningTo = true;
 	}
 protected:
-	void setCurrSquare() {
-		currSquare = sf::Vector2i(
-			getPosition().x / GAME_SQUARE_SIZE,
-			getPosition().y / GAME_SQUARE_SIZE);
-	}
-
 	void isInWater() {
 		if (getPosition().x <= GAME_TOTAL_SIZE - 10 && Entity::getPosition().y <= GAME_TOTAL_SIZE - 10 &&
-			squareVector[currSquare.y][currSquare.x].getType() == BIOME_WATER) inWater = true;
+			squareVector[getCurrSquare().y][getCurrSquare().x].getType() == BIOME_WATER) {
+			inWater = true;
+		}
 		else inWater = false;
-	}
+	};
 	void releaseParticles() {
 		if (particleClock.getElapsedTime().asSeconds() > 0.25 && (int(getVelocity().x) != 0 || int(getVelocity().y) != 0)) {
-			sf::Color currBiomeColor = chunkVector[getCurrChunk().y][getCurrChunk().x].squareVector[getCurrSquare().y][getCurrSquare().x].ground.getFillColor();
+			sf::Color currBiomeColor = squareVector[getCurrSquare().y][getCurrSquare().x].ground.getFillColor();
 			currBiomeColor = sf::Color(currBiomeColor.r * 0.85, currBiomeColor.g * 0.85, currBiomeColor.b * 0.85);
-			Particle::spawnParticles(currBiomeColor, std::fmax(fabs(getVelocity().x), fabs(getVelocity().y)), 0.75, getPosition());
+			int particlesCount = std::max(fabs(getVelocity().x), fabs(getVelocity().y));
+			if (inWater) {
+				Particle::spawnParticlesRadial(currBiomeColor, particlesCount, 0.85, getPosition(), 1.5);
+				if (!wasInWater) {
+					sf::Color c(BiomeColor[BIOME_WATER].r*1.3, BiomeColor[BIOME_WATER].g*1.3, 255);
+					Particle::spawnParticlesRadial(c, 30, 0.4, getPosition(), particlesCount);
+				}
+				wasInWater = true;
+			}
+			else {
+				Particle::spawnParticlesRadial(currBiomeColor, particlesCount, 0.85, getPosition(), 0.3);
+				wasInWater = false;
+			}
 			particleClock.restart();
 		}
 	}
@@ -380,6 +393,8 @@ protected:
 	std::vector<BiomeType> spawnBiomes;
 
 	bool hasAttacked = false;
+
+	bool wasInWater = false;
 
 	// rotation of mob
 	float rotation = 0;

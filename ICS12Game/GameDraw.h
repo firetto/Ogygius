@@ -18,10 +18,7 @@ void gameDraw(Player &player) {
 	// sets camera view
 	WINDOW.setView(player.getView());
 	WINDOW.draw(ground);
-	GAME_VIEW_LEFTSQUARE = player.getCurrSquare().x - player.getView().getSize().x / 2 / GAME_SQUARE_SIZE-1;
-	GAME_VIEW_RIGHTSQUARE = player.getCurrSquare().x + player.getView().getSize().x / 2 / GAME_SQUARE_SIZE+2;
-	GAME_VIEW_TOPSQUARE = player.getCurrSquare().y - player.getView().getSize().y / 2 / GAME_SQUARE_SIZE-1;
-	GAME_VIEW_BOTSQUARE = player.getCurrSquare().y + player.getView().getSize().y / 2 / GAME_SQUARE_SIZE+2;
+	
 	for (int h = GAME_VIEW_TOPSQUARE; h <= GAME_VIEW_BOTSQUARE; h++) {
 		for (int w = GAME_VIEW_LEFTSQUARE; w <= GAME_VIEW_RIGHTSQUARE; w++) {
 			WINDOW.draw(squareVector[h][w].ground);

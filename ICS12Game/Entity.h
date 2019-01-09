@@ -66,12 +66,6 @@ public:
 		setPosition(getPosition());
 	}
 
-	/*void setPosition(sf::Vector2f _pos) {
-		Object::x = _pos.x;
-		Object::y = _pos.y;
-	}
-	sf::Vector2f getPosition() { return sf::Vector2f(Object::x, Object::y); }*/
-
 protected:
 	// a clock for whatever the entity has to do with it
 	sf::Clock clock;

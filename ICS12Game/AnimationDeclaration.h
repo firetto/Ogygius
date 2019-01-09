@@ -1,7 +1,11 @@
+// loads the sprite sheets
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "AnimatedSprite.h"
 #include "Textures.h"
+
+// declares a fist, axe, and pickaxe animation
 Animation fistAnimation, axeAnimation, pickAnimation;
 void animationLoad() {
 	fistAnimation.setSpriteSheet(anim_fistTex);

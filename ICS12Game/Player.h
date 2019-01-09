@@ -61,8 +61,6 @@ public:
 		// if dropping item, drop item
 		dropItem();
 
-		setCurrSquare();
-
 		draw();
 
 		placeBreakables();
@@ -72,6 +70,8 @@ public:
 		isInWater();
 
 		releaseParticles();
+
+		setViewDimensions();
 
 		lastFrameCollision = false;
 
@@ -343,7 +343,17 @@ private:
 		else isPlacing = false;
 	}
 	
-	
+	void setViewDimensions() {
+		GAME_VIEW_LEFTSQUARE = getCurrSquare().x - getView().getSize().x / 2 / GAME_SQUARE_SIZE - 1;
+		GAME_VIEW_RIGHTSQUARE = getCurrSquare().x + getView().getSize().x / 2 / GAME_SQUARE_SIZE + 2;
+		GAME_VIEW_TOPSQUARE = getCurrSquare().y - getView().getSize().y / 2 / GAME_SQUARE_SIZE - 1;
+		GAME_VIEW_BOTSQUARE = getCurrSquare().y + getView().getSize().y / 2 / GAME_SQUARE_SIZE + 2;
+
+		if (GAME_VIEW_LEFTSQUARE < 0) GAME_VIEW_LEFTSQUARE = 0;
+		if (GAME_VIEW_RIGHTSQUARE >= GAME_SQUARES_PER_WORLD_AMOUNT.x) GAME_VIEW_RIGHTSQUARE = GAME_SQUARES_PER_WORLD_AMOUNT.x - 1;
+		if (GAME_VIEW_TOPSQUARE < 0) GAME_VIEW_TOPSQUARE = 0;
+		if (GAME_VIEW_BOTSQUARE >= GAME_SQUARES_PER_WORLD_AMOUNT.y) GAME_VIEW_BOTSQUARE = GAME_SQUARES_PER_WORLD_AMOUNT.y - 1;
+	}
 };
 Player *globalPlayer; // a player variable to be accessed basically only by the lambda functions in GameSetup...
 // MATTHEW 

@@ -15,6 +15,7 @@ public:
 				squares.back().push_back(GameMapSquare());
 				squares.back().back().type = BIOME_NONE;
 				float size = std::min(WINDOW_DIMENSIONS.x, WINDOW_DIMENSIONS.y) / (GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_SQUARE_PER_CHUNK_AMOUNT.x);
+				squareSize = size;
 				scale = size / float(GAME_SQUARE_SIZE);
 				squares.back().back().rect.setSize(sf::Vector2f(size, size));
 				squares.back().back().rect.setPosition(WINDOW_DIMENSIONS.x / 2 - size * width / 2 + a * size, WINDOW_DIMENSIONS.y / 2 - size * height / 2 + i * size);
@@ -45,7 +46,7 @@ public:
 	void update(sf::Vector2f position) {
 		sf::Vector2i square = sf::Vector2i(position.x / GAME_SQUARE_SIZE, position.y / GAME_SQUARE_SIZE);
 		int leftSquare = square.x - radius; leftSquare = (leftSquare < 0) ? 0 : leftSquare;
-		int rightSquare = square.x + radius; rightSquare = (rightSquare > GAME_SQUARE_PER_CHUNK_AMOUNT.x*GAME_CHUNKS_PER_WORLD_AMOUNT.x - 1) ? GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_CHUNKS_PER_WORLD_AMOUNT.x - 1 : rightSquare;
+		int rightSquare = square.x + radius; if (rightSquare > GAME_SQUARE_PER_CHUNK_AMOUNT.x*GAME_CHUNKS_PER_WORLD_AMOUNT.x - 1) rightSquare = GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_CHUNKS_PER_WORLD_AMOUNT.x - 1;
 		int topSquare = square.y - radius; topSquare = (topSquare < 0) ? 0 : topSquare;
 		int botSquare = square.y + radius; botSquare = (botSquare > GAME_SQUARE_PER_CHUNK_AMOUNT.y *GAME_CHUNKS_PER_WORLD_AMOUNT.y - 1) ? GAME_SQUARE_PER_CHUNK_AMOUNT.y * GAME_CHUNKS_PER_WORLD_AMOUNT.y - 1 : botSquare;
 		playerPosition.setPosition(squares[0][0].rect.getPosition().x + position.x*scale, position.y*scale);
@@ -97,6 +98,7 @@ public:
 				oldMousePos = WINDOW.mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
 				break;
 			}
+		
 			if (view.getCenter().x - playerPosition.getPosition().x > view.getSize().x / 2)
 				view.setCenter(playerPosition.getPosition().x + view.getSize().x / 2, view.getCenter().y);
 			else if (playerPosition.getPosition().x - view.getCenter().x > view.getSize().x / 2)
@@ -123,9 +125,21 @@ public:
 			}
 		}
 	}
+	void revealAll() {
+		for (int i = 0; i < GAME_SQUARES_PER_WORLD_AMOUNT.y; i++) {
+			for (int a = 0; a < GAME_SQUARES_PER_WORLD_AMOUNT.x; a++) {
+				squares[i][a].type = squareVector[i][a].getType();
+				squares[i][a].rect.setFillColor(BiomeColor[squares[i][a].type]);
+			}
+		}
+		farthestTop = farthestLeft = 0;
+		farthestRight = GAME_SQUARES_PER_WORLD_AMOUNT.x - 1;
+		farthestBot = GAME_SQUARES_PER_WORLD_AMOUNT.y - 1;
+	}
 	void draw() {
 		WINDOW.draw(screenOverlay);
 		WINDOW.setView(view);
+		// TODO: Optimize further by not drawing the squares that are not in the view, mathematically. 
 		for (int i = farthestTop; i < farthestBot; i++) {
 			for (int a = farthestLeft; a < farthestRight; a++) {
 				if (squares[i][a].type != BIOME_NONE && view.inView(squares[i][a].rect.getGlobalBounds())) {
@@ -150,7 +164,7 @@ private:
 	}
 	std::vector<std::vector<GameMapSquare>> squares;
 	int width, height;
-	float scale;
+	float scale, squareSize;
 	int radius = 6;
 	bool draggingScreen = false;
 	bool followPlayer = true, resetMap = false;
