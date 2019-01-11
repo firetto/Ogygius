@@ -11,12 +11,16 @@ sf::Texture playerTex;
 // fist animation textures
 sf::Texture anim_fistTex, anim_axeTex, anim_pickTex;
 
+// crafting HUD texture
 sf::Texture hud_craftingTex;
 
+// loot outline texture
 sf::Texture lootOutlineTex;
 
+// cursor texture and sprite
 sf::Texture cursorTex; sf::Sprite cursor;
 
+// particle texture
 sf::Texture particleTex;
 
 // a list of breakable textures
@@ -50,23 +54,29 @@ void loadTexture(sf::Texture &texture, std::string directory) {
 }
 // this function loads all of the textures from the directories into the texture variables
 void textureLoad() {
+
+	// load cursor texture
 	loadTexture(cursorTex, "textures/cursor.png");
+
+	// set up cursor sprite
 	cursor.setTexture(cursorTex);
 	cursor.setOrigin(cursor.getGlobalBounds().width / 2, cursor.getGlobalBounds().height / 2);
 
 	// sets player texture
 	loadTexture(playerTex, "textures/playerBody.png");
 
+	// set animation textures
 	loadTexture(anim_fistTex, "textures/fist.png");
-
 	loadTexture(anim_axeTex, "textures/axestrike.png");
-
 	loadTexture(anim_pickTex, "textures/pickaxestrike.png");
 
+	// set craftig HUD texture
 	loadTexture(hud_craftingTex, "textures/HUD_craft.png");
 
+	// set loot outline texture
 	loadTexture(lootOutlineTex, "textures/lootsquare.png");
 
+	// set particle texture
 	loadTexture(particleTex, "textures/particle.png");
 
 	// load number of textures for breakables
@@ -75,12 +85,14 @@ void textureLoad() {
 		breakableTextureMap.insert(std::pair<int, sf::Texture>(i, sf::Texture()));
 	}
 
+	// declare breakable textures
 	breakableTextureDirectoryMap[BREAKABLE_TREE] = "textures/collidables/treeleaves.png";
 	breakableTextureDirectoryMap[BREAKABLE_ROCK] = "textures/collidables/rock.png";
 	breakableTextureDirectoryMap[BREAKABLE_GRASS] = "textures/collidables/tallgrass.png";
 	breakableTextureDirectoryMap[BREAKABLE_CRAFTING_STUMP] = "textures/collidables/log.png";
 	breakableTextureDirectoryMap[BREAKABLE_WALL_WOOD] = "textures/collidables/fencewood.png";
 
+	// load the textures
 	for (int i = 0; i < breakableTextureMap.size(); i++) {
 		loadTexture(breakableTextureMap[i], breakableTextureDirectoryMap[i]);
 	}
@@ -91,6 +103,7 @@ void textureLoad() {
 		itemTextureMap.insert(std::pair<int, sf::Texture>(i, sf::Texture()));
 	}
 
+	// set up item textures
 	itemTextureDirectoryMap[ITEM_WOOD] = "textures/drops/wood.png";
 	itemTextureDirectoryMap[ITEM_STONE] = "textures/drops/stone.png";
 	itemTextureDirectoryMap[ITEM_GRASS] = "textures/drops/grass.png";
@@ -104,21 +117,29 @@ void textureLoad() {
 	itemTextureDirectoryMap[ITEM_WALL_WOOD] = "textures/drops/fence.png";
 	itemTextureDirectoryMap[ITEM_MEAT] = "textures/drops/meat.png";
 
+	// load the textures
 	for (int i = 0; i < itemTextureMap.size(); i++) {
 		loadTexture(itemTextureMap[i], itemTextureDirectoryMap[i]);
 	}
 
+	// set up directories for textures for mobs
 	for (int i = 0; i < MOBTYPE_COUNT; i++) {
 		mobTextureDirectoryMap.insert(std::pair<int, std::string>(i, std::string()));
 		mobTextureMap.insert(std::pair<int, sf::Texture>(i, sf::Texture()));
 	}
+
+	// load mob textures
 	mobTextureDirectoryMap[MOB_COW] = "textures/mobs/cow.png";
 	mobTextureDirectoryMap[MOB_MOUSE] = "textures/mobs/mouse.png";
 	mobTextureDirectoryMap[MOB_MOUSE_ANGRY] = "textures/mobs/mouse_angry.png";
 
+	// load mob textures
 	for (int i = 0; i < MOBTYPE_COUNT; i++) loadTexture(mobTextureMap[i], mobTextureDirectoryMap[i]);
 }
 
+// load the font
 void fontLoad() {
-	gameFont.loadFromFile("gameFont.ttf");
+
+	// load font
+	gameFont.loadFromFile("textures/gameFont.ttf");
 }
