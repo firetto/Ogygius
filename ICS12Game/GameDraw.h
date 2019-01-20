@@ -24,6 +24,7 @@ void gameDraw(Player &player) {
 	for (int h = GAME_VIEW_TOPSQUARE; h <= GAME_VIEW_BOTSQUARE; h++)
 		for (int w = GAME_VIEW_LEFTSQUARE; w <= GAME_VIEW_RIGHTSQUARE; w++)
 			WINDOW.draw(squareVector[h][w].ground);
+		
 	
 	// draw all drawables
 	for (ObjDrawable d : drawableVector) { if (player.getView().inView(d.vis.getGlobalBounds())) d.draw(); }

@@ -37,6 +37,9 @@ public:
 	// whether the item can only be broken with the item type defined above ^
 	bool breakableExclusive = false, dropExclusive = false;
 
+	// if placing more precisely
+	bool placePrecise = false;
+
 	// basic constructor
 	Breakable() {}
 
@@ -147,4 +150,5 @@ void declareBreakables() {
 	breakableMap[BREAKABLE_WALL_WOOD].breakableBy = ITEM_AXE;
 	breakableMap[BREAKABLE_WALL_WOOD].itemToDrop = ITEM_WALL_WOOD;
 	breakableMap[BREAKABLE_WALL_WOOD].height = 4;
+	breakableMap[BREAKABLE_WALL_WOOD].placePrecise = true;
 }

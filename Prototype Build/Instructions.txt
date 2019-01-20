@@ -1,0 +1,27 @@
+
+--------------------
+Welcome to OGYGIUS!
+--------------------
+
+Run the game by opening Ogygius.exe in the "Play Game" folder.
+
+--------------------
+
+This game was developed by Anatoly Zavyalov and Jonathan Sumabat, from September 2018 to January 2019.
+
+OBJECTIVE: Survive.
+
+Harvest resources and craft new tools. At night, mice turn hostile and chase you. Eat meat to heal yourself.
+
+CONTROLS:
+
+WASD - Movement
+M - Open map
+Esc - Pause game
+Left click - Attack
+Right Click - Place objects/Eat
+Walk close to a crafting table to use it.
+
+KNOWN BUGS:
+- Sometimes mobs can spawn without heads and not rotate. This is unexplained, and may be fixed by reopening the game.
+- The main menu animation lags after being open for a while (will be fixed soon)

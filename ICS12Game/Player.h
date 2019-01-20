@@ -45,6 +45,7 @@ public:
 
 	// update the player physics, etc.
 	void update() {
+
 		// update controls
 		controls();
 
@@ -482,16 +483,32 @@ private:
 			// item is placing
 			isPlacing = true;
 
-			// get position
-			sf::Vector2f pos = sf::Vector2f(
-				int((getPosition().x + getFacing().x * 150) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2,
-				int((getPosition().y + getFacing().y * 150) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2);
+			float rot = round(getRotation() / 22.5) * 22.5;
 
+			// get position
+			sf::Vector2f pos;
+			if (breakableMap[items.getItemSelected().placeType].placePrecise) {
+				rot = round(getRotation() / 45) * 45;
+				if ((int)rot % 10 != 0) pos = sf::Vector2f(
+					int((getPosition().x + getFacing().x * 125) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2,
+					int((getPosition().y + getFacing().y * 125) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2);
+				else {
+					pos = sf::Vector2f(
+						int((getPosition().x + getFacing().x * 125) / (GAME_SQUARE_SIZE / 4))*(GAME_SQUARE_SIZE / 4) + ((rot == 0) ? GAME_SQUARE_SIZE / 8 : (rot == -180) ? -GAME_SQUARE_SIZE / 8 : 0),
+						int((getPosition().y + getFacing().y * 125) / (GAME_SQUARE_SIZE / 4))*(GAME_SQUARE_SIZE / 4) + ((rot == 90) ? GAME_SQUARE_SIZE / 8 : (rot == -90) ? -GAME_SQUARE_SIZE / 8 : 0));
+				}
+			}
+			else {
+				pos = sf::Vector2f(
+					int((getPosition().x + getFacing().x * 125) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2,
+					int((getPosition().y + getFacing().y * 125) / GAME_SQUARE_SIZE)*GAME_SQUARE_SIZE + GAME_SQUARE_SIZE / 2);
+			}
+			
 			// get the square index
 			sf::Vector2i squareIndx = sf::Vector2i(pos.x / GAME_SQUARE_SIZE, pos.y / GAME_SQUARE_SIZE);
 
 			// rotation
-			float rot = round(getRotation() / 22.5) * 22.5;
+			
 
 			// set place sprite 
 			placeSprite = sf::Sprite(breakableTextureMap[items.getItemSelected().placeType]);

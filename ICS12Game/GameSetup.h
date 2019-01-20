@@ -43,8 +43,8 @@ public:
 		// set up load text
 		setupLoadText();
 
-		// set up load bar (8 checkpoints)
-		setupLoadBar(8);
+		// set up load bar (7 checkpoints)
+		setupLoadBar(7);
 
 		// draw load text
 		drawLoadText();
@@ -53,22 +53,21 @@ public:
 		currentGUIScreen = &gameScreen;
 
 		// activate next checkpoint
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Generating the world..");
 
 		// generate the world
 		generateWorld();
 
 		// next load checkpoint
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Still generating the world.....");
 
 		// add the world to the main square vector
 		addWorldToSquares();
 		
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Tinkering with some stuff...");
 
 		// setup craft hud
 		craftHUD = CraftingHUD();
-		nextLoadCheckpoint();
 
 		// clear arrays
 		mobVector.clear();
@@ -76,22 +75,22 @@ public:
 
 		// reset days
 		resetDay();
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Spawning mobs...");
 
 		// spawn some mobs
 		Mob::spawnMob(10, sf::IntRect(int(GAME_CHUNKS_PER_WORLD_AMOUNT.x / 2) - 2, int(GAME_CHUNKS_PER_WORLD_AMOUNT.y / 2) - 2, 4, 4));
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Setting up the player...");
 
 		// reset player
 		globalPlayer->reset();
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Setting up the map...");
 
 		// generate map
 		map = GameMap();
 
 		// reveal mapa
 		if (GAME_MAP_REVEAL_ALL) map.revealAll();
-		nextLoadCheckpoint();
+		nextLoadCheckpoint("Done!");
 
 		// clear map after drawing the text and load bar
 		WINDOW.clear();
@@ -132,15 +131,20 @@ private:
 		maxLoadCheckpoints = checkpoints;
 		loadCheckpoint = 0;
 	}
-	void nextLoadCheckpoint() {
+	void nextLoadCheckpoint(std::string label) {
 		// increment checkpoint
 		loadCheckpoint++;
 
 		// change size of load bar
 		loadBarPart.setSize(sf::Vector2f(loadBarFull.getSize().x * ((float)loadCheckpoint / maxLoadCheckpoints), 16));
 
+		gameLoadText.setString(label);
+		gameLoadText.setOrigin(gameLoadText.getGlobalBounds().width / 2, gameLoadText.getGlobalBounds().height / 2);
+		
+		drawLoadText();
 		// draw bar
 		drawLoadBar();
+		
 	}
 	void drawLoadBar() {
 		// draw bars

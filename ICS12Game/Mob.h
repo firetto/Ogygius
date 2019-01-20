@@ -33,7 +33,7 @@ public:
 		height = 5;
 
 		// set head and body textures
-		vis.setTexture(mobTextureMap[type]);
+		vis	.setTexture(mobTextureMap[type]);
 		head.setTexture(mobTextureMap[type]);
 
 		// set the sprite rects of the mobs for heads and bodies, different depending on the mobs
@@ -125,6 +125,7 @@ public:
 
 		// set head position and rotation
 		head.setPosition(sf::Vector2f(getPosition().x + _head_from_middle_amount * (sin(rotation * PI / 180)), getPosition().y - _head_from_middle_amount * cos(rotation * PI / 180)));
+	
 		head.setRotation(headRotation);
 		
 		// set sprite rotation
@@ -221,22 +222,28 @@ public:
 			// declare new acceleration variables
 			float newAccelX, newAccelY;
 
-			// if the angle is <90
-			if (angle < 90) {
-				newAccelX = kbAmount * cos(angle*PI / 180);
-				newAccelY = kbAmount * sin(angle*PI / 180);
+			// if they are at the same position
+			if (getPosition().x == collidable.getPosition().x && getPosition().y == collidable.getPosition().y) {
+				newAccelX = kbAmount * cos(getRandomInt(0, 360)*PI / 180);
+				newAccelY = kbAmount * sin(getRandomInt(0, 360)*PI / 180);
 			}
-			// if angle is between 90 and 180
-			else if (angle < 180) {
-				newAccelX = -kbAmount * sin((angle - 90)*PI / 180);
-				newAccelY = kbAmount * cos((angle - 90)*PI / 180);
-			}
-			// otherwise
 			else {
-				newAccelX = -kbAmount * cos(angle*PI / 180);
-				newAccelY = kbAmount * sin(angle*PI / 180);
+				// if the angle is <90
+				if (angle < 90) {
+					newAccelX = kbAmount * cos(angle*PI / 180);
+					newAccelY = kbAmount * sin(angle*PI / 180);
+				}
+				// if angle is between 90 and 180
+				else if (angle < 180) {
+					newAccelX = -kbAmount * sin((angle - 90)*PI / 180);
+					newAccelY = kbAmount * cos((angle - 90)*PI / 180);
+				}
+				// otherwise
+				else {
+					newAccelX = -kbAmount * cos(angle*PI / 180);
+					newAccelY = kbAmount * sin(angle*PI / 180);
+				}
 			}
-			
 			// if the mob can move, push it back
 			if (canMove) setAcceleration(sf::Vector2f(newAccelX, newAccelY));
 
@@ -359,6 +366,7 @@ public:
 						// add the mob
 						mobVector.push_back(Mob(mobMap[i].type));
 						mobVector.back().setPosition(square.ground.getPosition());
+						Particle::spawnParticlesRadial(sf::Color(128,128,128), 20, 1, mobVector.back().getPosition(), 4);
 						done = true;
 					}
 				}
@@ -505,6 +513,16 @@ private:
 
 			// if its not running
 			if (aiState != STATE_RUN) {
+				
+				wasRunning = false;
+				if (isnan(rotation)) rotation = 0;
+				if (isnan(headRotation)) headRotation = 180;
+				if (isnan(toRotation)) toRotation = 0;
+
+				if (rotation < 0 || rotation > 360) rotation = 0;
+				if (headRotation < 0 || headRotation > 360) headRotation = 0;
+				if (toRotation < 0 || toRotation > 360) toRotation = 0;
+
 
 				// if the clock is 1 second away from elapsing, rotate the body
 				if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1) {
@@ -515,19 +533,28 @@ private:
 				else if (aiClock.getElapsedTime().asSeconds() >= aiStateLength - 1.5) {
 
 					// get head rotation compared to normal rotation
-					int r = int(headRotation) - 180;
+					float r = headRotation - 180;
 
 					// rotate head
-					headRotation = (int(toRotation) != r) ? ((toRotation - r) * 2)*(aiClock.getElapsedTime().asSeconds() - (aiStateLength - 1.5)) + headRotation : toRotation + 180;
+					headRotation = (int(toRotation) != int(r)) ? ((toRotation - r) * 2)*(aiClock.getElapsedTime().asSeconds() - (aiStateLength - 1.5)) + headRotation : toRotation + 180;
 				}
 
 				// otehrwise, just calculate a random angle that it will rotate to
 				else toRotation = getRandomFloat(rotation - 85, rotation + 85);
 			}
 			else {
-				//  gets the angle between itself and the other mob
 				float angle = getAngleBetweenPoints(getPosition(), mobToRun->getPosition());
-
+				/*
+				//  gets the angle between itself and the other mob
+				
+				if (!wasRunning && (((runningTo && int(angle - 90) != int(rotation)) || (!runningTo && int(angle + 90) != int(rotation))))) {
+					if (runningTo) rotation = (int(angle - 90) != int(rotation)) ? (int(angle - 90) > int(rotation)) ? rotation + (rotation - angle + 90)*0.05 : rotation - (rotation - angle + 90)*0.05 : angle - 90;
+					else rotation = (int(angle + 90) != int(rotation)) ? (int(angle + 90) > int(rotation)) ? rotation + (rotation - angle - 90)*0.05 : rotation - (rotation - angle - 90)*0.05 : angle + 90;
+				}
+				else {
+					wasRunning = true;
+					
+				}*/
 				// if running to the mob
 				if (runningTo) {
 					rotation = angle - 90;
@@ -674,6 +701,9 @@ protected:
 	// whether last frame was in water
 	bool wasInWater = false;
 
+	// whether it was already running
+	bool wasRunning = false;
+
 	// rotation of mob
 	float rotation = 0;
 };
@@ -697,13 +727,13 @@ void declareMobs() {
 	// MOUSE
 	BiomeType t2[4] = { BIOME_GRASSLANDS, BIOME_FOREST, BIOME_SAVANNAH, BIOME_DESERT };
 	mobMap[MOB_MOUSE].setHealth(10);
-	mobMap[MOB_MOUSE].setMoveSpeed(0.4);
-	mobMap[MOB_MOUSE].setSpawnRate(1000);
+	mobMap[MOB_MOUSE].setMoveSpeed(0.33);
+	mobMap[MOB_MOUSE].setSpawnRate(2000);
 	mobMap[MOB_MOUSE].setSpawnBiomes(t2);
 	
 	// ANGRY MOUSE
-	mobMap[MOB_MOUSE_ANGRY].setHealth(15);
-	mobMap[MOB_MOUSE_ANGRY].setMoveSpeed(0.4);
+	mobMap[MOB_MOUSE_ANGRY].setHealth(10);
+	mobMap[MOB_MOUSE_ANGRY].setMoveSpeed(0.375);
 	mobMap[MOB_MOUSE_ANGRY].setHostility(true);
 	mobMap[MOB_MOUSE_ANGRY].setDamage(1);
 }

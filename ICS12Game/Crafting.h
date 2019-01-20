@@ -212,7 +212,8 @@ private:
 			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_WOOD], 1), Item(itemMap[ITEM_STICK], 3)));
 			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_ROPE], 2), Item(itemMap[ITEM_STICK], 3), Item(itemMap[ITEM_STONE], 2), itemMap[ITEM_AXE]));
 			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_ROPE], 2), Item(itemMap[ITEM_STICK], 3), Item(itemMap[ITEM_STONE], 2), itemMap[ITEM_PICKAXE]));
-			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_ROPE], 2), Item(itemMap[ITEM_STICK], 3), Item(itemMap[ITEM_WOOD], 5), Item(itemMap[ITEM_WALL_WOOD], 4)));
+			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_STICK],	1), Item(itemMap[ITEM_WALL_WOOD], 50)));
+			recipes.push_back(CraftingRecipe(Item(itemMap[ITEM_ROPE], 2), Item(itemMap[ITEM_STICK], 3), Item(itemMap[ITEM_WOOD], 5), Item(itemMap[ITEM_WALL_WOOD], 8)));
 		}
 
 		// sets position of product icons
