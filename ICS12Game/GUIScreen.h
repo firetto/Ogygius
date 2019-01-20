@@ -133,6 +133,11 @@ public:
 		addText(label, position, true);
 	}
 
+	void changeText(int index, std::string label) {
+		textVector[index].setString(label);
+		textVector[index].setOrigin(textVector[index].getGlobalBounds().width / 2, textVector[index].getCharacterSize() / 2 + textVector[index].getCharacterSize()*(1.0 / 7));
+	}
+
 	// get a text element by the n
 	sf::Text &getTextByNumber(int n) {
 		return textVector[n];

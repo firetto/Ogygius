@@ -25,23 +25,39 @@ const float GAME_ENTITY_BOUNCE_AMOUNT = 1.75;
 // how many squares are in a chunk (leave at 16, don't set too high if you don't want stack overflow)
 const sf::Vector2f GAME_SQUARE_PER_CHUNK_AMOUNT(16, 16);
 
+const sf::Vector2f GAME_CHUNK_SIZE_TYPES[5] = {
+	sf::Vector2f(8,8),
+	sf::Vector2f(16,16),
+	sf::Vector2f(32,32),
+	sf::Vector2f(48,48),
+	sf::Vector2f(64,64),
+};
+const std::string GAME_CHUNK_SIZE_LABELS[5] = {
+	"Tiny",
+	"Medium",
+	"Large",
+	"Gigantic",
+	"LAGtastic",
+};
+int GAME_CURRENT_CHUNK_SIZE_POSITION = 1;
+
 // how many chunks are in a world
-const sf::Vector2f GAME_CHUNKS_PER_WORLD_AMOUNT(16, 16);
+sf::Vector2f GAME_CHUNKS_PER_WORLD_AMOUNT = GAME_CHUNK_SIZE_TYPES[GAME_CURRENT_CHUNK_SIZE_POSITION];
 
 // how many squares are in a world
-const sf::Vector2f GAME_SQUARES_PER_WORLD_AMOUNT(GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_CHUNKS_PER_WORLD_AMOUNT.x, GAME_SQUARE_PER_CHUNK_AMOUNT.y * GAME_CHUNKS_PER_WORLD_AMOUNT.y);
+sf::Vector2f GAME_SQUARES_PER_WORLD_AMOUNT(GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_CHUNKS_PER_WORLD_AMOUNT.x, GAME_SQUARE_PER_CHUNK_AMOUNT.y * GAME_CHUNKS_PER_WORLD_AMOUNT.y);
 
 // the square size (in pixels)
 const int GAME_SQUARE_SIZE = 128;
 
 // chunk size (in pixels)
-const int GAME_CHUNK_SIZE = GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_SQUARE_SIZE;
+int GAME_CHUNK_SIZE = GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_SQUARE_SIZE;
 
 // total pixel count of the wolrd
-const int GAME_TOTAL_SIZE = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_CHUNK_SIZE;
+int GAME_TOTAL_SIZE = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_CHUNK_SIZE;
 
 // whether the map reveals the entire world on creation
-const bool GAME_MAP_REVEAL_ALL = false;
+const bool GAME_MAP_REVEAL_ALL = true;
 
 // render distance of the game
 const int GAME_RENDER_DISTANCE = sqrt(pow(WINDOW.getSize().x / 2, 2) + pow(WINDOW.getSize().y / 2, 2));
@@ -74,7 +90,7 @@ sf::Clock GAME_CLICK_DELAY_CLOCK, DEPTH_BUFFER_SORT_DELAY_CLOCK;
 const float GAME_CLICK_DELAY_TIME = 0.3, DEPTH_BUFFER_SORT_DELAY_TIME = 2;
 
 // whether game click delay has passed
-bool GAME_CLICK_DELAY_PASSED = true;
+bool GAME_CLICK_DELAY_PASSED = false;
 
 // whether the map is open
 bool GAME_MAP_OPEN = false;

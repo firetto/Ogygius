@@ -219,6 +219,15 @@ void guiRefresh() {
 	// set up map GUI screen
 	map.setupGUIScreen();
 }
+
+// update the world size variables
+void gameSquareSizeUpdate() {
+	GAME_CHUNKS_PER_WORLD_AMOUNT = GAME_CHUNK_SIZE_TYPES[GAME_CURRENT_CHUNK_SIZE_POSITION];
+	GAME_SQUARES_PER_WORLD_AMOUNT = sf::Vector2f(GAME_SQUARE_PER_CHUNK_AMOUNT.x * GAME_CHUNKS_PER_WORLD_AMOUNT.x, GAME_SQUARE_PER_CHUNK_AMOUNT.y * GAME_CHUNKS_PER_WORLD_AMOUNT.y);
+	GAME_TOTAL_SIZE = GAME_CHUNKS_PER_WORLD_AMOUNT.x * GAME_CHUNK_SIZE;
+	settingsScreen.changeText(4, GAME_CHUNK_SIZE_LABELS[GAME_CURRENT_CHUNK_SIZE_POSITION]);
+	globalPlayer->setPosition(sf::Vector2f(GAME_TOTAL_SIZE / 2, GAME_TOTAL_SIZE / 2));
+}
 void updateResolution() {
 	// set up window
 	windowSetup();
@@ -333,6 +342,26 @@ void guiSetup() {
 
 	// add fullscreen checkmark
 	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &isFullscreen);
+
+	// add world size text
+	settingsScreen.addText("World Size", sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.575), true, true);
+
+	// add world size label
+	settingsScreen.addText(GAME_CHUNK_SIZE_LABELS[GAME_CURRENT_CHUNK_SIZE_POSITION], sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), true, true);
+
+	// add world size down button
+	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), [] {
+		GAME_CURRENT_CHUNK_SIZE_POSITION--;
+		if (GAME_CURRENT_CHUNK_SIZE_POSITION < 0) GAME_CURRENT_CHUNK_SIZE_POSITION = sizeof(GAME_CHUNK_SIZE_TYPES)/sizeof(GAME_CHUNK_SIZE_TYPES[0]) - 1;
+		gameSquareSizeUpdate();
+	});
+
+	// add world size up button
+	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), [] {
+		GAME_CURRENT_CHUNK_SIZE_POSITION++;
+		if (GAME_CURRENT_CHUNK_SIZE_POSITION == sizeof(GAME_CHUNK_SIZE_TYPES) / sizeof(GAME_CHUNK_SIZE_TYPES[0])) GAME_CURRENT_CHUNK_SIZE_POSITION = 0;
+		gameSquareSizeUpdate();
+	});
 
 	// set up pause menu screen
 	pauseMenuScreen.setTitleText("Game Paused");
