@@ -1,3 +1,17 @@
+/*
+------------------------------------------------
+Ogygius - Survival Game
+Developed by: Anatoly Zavyalov, Jonathan Sumabat
+------------------------------------------------
+
+GameSetup.h 
+
+This file is for the game setup.
+*/
+
+
+
+
 #pragma once
 #include "Player.h"
 #include "WorldGeneration.h"
@@ -212,7 +226,10 @@ void guiRefresh() {
 	pauseMenuScreen.clear();
 	map.clear();
 	gameScreen.clear();
-
+	creditScreen.clear();
+	h2pScreen.clear();
+	controlsScreen.clear();
+	
 	// call GUI set up
 	guiSetup();
 
@@ -273,30 +290,69 @@ void guiSetup() {
 	// set up info screen
 	infoScreen.setTitleText("About Ogygius");
 
-	// add body text
-	infoScreen.setBodyText("Ogygius is a survival adventure game, similar to Minecraft. To survive, you must craft weapons and tools and battle hostile creatures that will try to eat you. Build walls and structures to defend yourself from the creatures that the darkness brings. _NEWLINE_ _NEWLINE_ Game developed by: Anatoly Zavyalov, Jonathan Sumabat.");
-	
+	infoScreen.addButton("How to Play", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.3), [] {
+		currentGUIScreen = &h2pScreen;
+	});
+
+	infoScreen.addButton("Controls", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.3 + WINDOW_DIMENSIONS.y / 8), [] {
+		currentGUIScreen = &controlsScreen;
+	});
+
+	infoScreen.addButton("Credits", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.3 + WINDOW_DIMENSIONS.y / 4), [] {
+		currentGUIScreen = &creditScreen;
+	});
+
 	// return to menu button
 	infoScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
 		currentGUIScreen = &mainMenuScreen;
 	});
 
+	h2pScreen.setTitleText("How to Play");
+
+	// add body text
+	h2pScreen.setBodyText("Ogygius is a survival adventure game, similar to Minecraft. To survive, you must craft weapons and tools and battle hostile creatures that will try to eat you. Build walls and structures to defend yourself from the creatures that the darkness brings.");
+	
+	// return to menu button
+	h2pScreen.addButton("Back", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
+		currentGUIScreen = &infoScreen;
+	});
+
+	controlsScreen.setTitleText("Controls");
+	
+	controlsScreen.setBodyText("WASD - Movement _NEWLINE_ Mouse - Look Around _NEWLINE_ Left Click - Attack _NEWLINE_ Right Click - Use Objects _NEWLINE_ M - Map _NEWLINE_ Esc - Pause", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 5));
+
+	// return to menu button
+	controlsScreen.addButton("Back", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
+		currentGUIScreen = &infoScreen;
+	});
+
+	creditScreen.setTitleText("Credits");
+
+	creditScreen.setBodyText("Ogygius was developed by Anatoly Zavyalov and Jonathan Sumabat, from September 2018 to January 2019. _NEWLINE_ _NEWLINE_ Ogygius was made for Mr. Benum's ICS4UE Computer Science Grade 12 Class for January 21, 2019.");
+
+	// return to menu button
+	creditScreen.addButton("Back", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
+		currentGUIScreen = &infoScreen;
+	});
+
 	// set up settings screen
 	settingsScreen.setTitleText("Settings");
 
-	// add screen resolution header text
-	settingsScreen.addText("Screen Resolution", sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 4), true, true);
-
-	// add screen resolution text
-	settingsScreen.addText(std::to_string(WINDOW_DIMENSIONS.x) + "x" + std::to_string(WINDOW_DIMENSIONS.y), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), true, true);
-	
 	// add return to menu button
 	settingsScreen.addButton("Return to Menu", sf::Vector2f(WINDOW_DIMENSIONS.x / 3, WINDOW_DIMENSIONS.y / 10), sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y * 0.9), [] {
 		currentGUIScreen = &mainMenuScreen;
 	});
+
+	// add screen resolution header text
+	settingsScreen.addText("Screen Resolution", sf::Vector2f(WINDOW_DIMENSIONS.x / 4, WINDOW_DIMENSIONS.y / 4), true, true);
+
+	// add screen resolution text
+	settingsScreen.addText(std::to_string(WINDOW_DIMENSIONS.x) + "x" + std::to_string(WINDOW_DIMENSIONS.y), sf::Vector2f(WINDOW_DIMENSIONS.x / 4, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), true, true);
+	
+
 	
 	// decrease window resolution
-	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
+	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 4 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
 		
 		// decrements window dimensions pos
 		currentWindowDimensionsPos--;
@@ -316,7 +372,7 @@ void guiSetup() {
 		// sets the GUI screen
 		currentGUIScreen = &settingsScreen;
 	});
-	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
+	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 4 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
 		
 		// increments window dimensions pos
 		currentWindowDimensionsPos++;
@@ -338,30 +394,34 @@ void guiSetup() {
 	});
 
 	// add fullscreen text
-	settingsScreen.addText("Fullscreen", sf::Vector2f(WINDOW_DIMENSIONS.x / 3 - WINDOW_DIMENSIONS.x / 36, WINDOW_DIMENSIONS.y / 2), false, true);
+	settingsScreen.addText("Fullscreen", sf::Vector2f(WINDOW_DIMENSIONS.x / 4 - WINDOW_DIMENSIONS.x / 6 - WINDOW_DIMENSIONS.x / 36, WINDOW_DIMENSIONS.y / 2), false, true);
 
 	// add fullscreen checkmark
-	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &isFullscreen);
+	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x / 4 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &isFullscreen);
 
 	// add world size text
-	settingsScreen.addText("World Size", sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.575), true, true);
+	settingsScreen.addText("World Size", sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75, WINDOW_DIMENSIONS.y / 4), true, true);
 
 	// add world size label
-	settingsScreen.addText(GAME_CHUNK_SIZE_LABELS[GAME_CURRENT_CHUNK_SIZE_POSITION], sf::Vector2f(WINDOW_DIMENSIONS.x / 2, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), true, true);
+	settingsScreen.addText(GAME_CHUNK_SIZE_LABELS[GAME_CURRENT_CHUNK_SIZE_POSITION], sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), true, true);
 
 	// add world size down button
-	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), [] {
+	settingsScreen.addButton("<", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75 - WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
 		GAME_CURRENT_CHUNK_SIZE_POSITION--;
 		if (GAME_CURRENT_CHUNK_SIZE_POSITION < 0) GAME_CURRENT_CHUNK_SIZE_POSITION = sizeof(GAME_CHUNK_SIZE_TYPES)/sizeof(GAME_CHUNK_SIZE_TYPES[0]) - 1;
 		gameSquareSizeUpdate();
 	});
 
 	// add world size up button
-	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x / 2 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 1.575 + WINDOW_DIMENSIONS.y / 10), [] {
+	settingsScreen.addButton(">", sf::Vector2f(WINDOW_DIMENSIONS.x / 18, WINDOW_DIMENSIONS.y / 15), sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 4 + WINDOW_DIMENSIONS.y / 10), [] {
 		GAME_CURRENT_CHUNK_SIZE_POSITION++;
 		if (GAME_CURRENT_CHUNK_SIZE_POSITION == sizeof(GAME_CHUNK_SIZE_TYPES) / sizeof(GAME_CHUNK_SIZE_TYPES[0])) GAME_CURRENT_CHUNK_SIZE_POSITION = 0;
 		gameSquareSizeUpdate();
 	});
+
+	settingsScreen.addText("Reveal Map", sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75 - WINDOW_DIMENSIONS.x / 6 - WINDOW_DIMENSIONS.x / 36, WINDOW_DIMENSIONS.y / 2), false, true);
+
+	settingsScreen.addCheckmark(WINDOW_DIMENSIONS.x / 30, sf::Vector2f(WINDOW_DIMENSIONS.x * 0.75 + WINDOW_DIMENSIONS.x / 6, WINDOW_DIMENSIONS.y / 2), &GAME_MAP_REVEAL_ALL);
 
 	// set up pause menu screen
 	pauseMenuScreen.setTitleText("Game Paused");

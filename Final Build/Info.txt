@@ -1,0 +1,36 @@
+
+--------------------
+Welcome to OGYGIUS!
+--------------------
+
+Run the game by opening Ogygius.exe in the "Play Game" folder.
+
+--------------------
+
+OBJECTIVE: Survive.
+
+Harvest resources and craft new tools. At night, mice turn hostile and chase you. Eat meat to heal yourself.
+
+CONTROLS:
+WASD - Movement
+M - Open map
+Esc - Pause game
+Left click - Attack
+Right Click - Place objects/Eat
+Walk close to a crafting table to use it.
+
+CREDITS:
+This game was developed by Anatoly Zavyalov and Jonathan Sumabat, from September 2018 to January 2019.
+
+Since Jonathan Sumabat does not have a Windows-based machine, he was not able to effectively add new content without graphical feedback. 
+Therefore, he was mainly assisting with more complex algorithms used in the program, as well as being a consultant when it came to code and general decisions.
+
+SOURCES:
+- Ogygius was inspired by the game Minecraft, which was created by Markus Persson: https://www.minecraft.net/
+- Ogygius was also inspired by the game surviv.io: http://www.surviv.io/
+- To create this game, we used the SFML 2.5 library for handling graphics and the window: https://www.sfml-dev.org/
+- We used the C++ programming language in the Visual Studio environment
+- To learn the SFML library, we used these tutorials used by the creators of SFML: https://www.sfml-dev.org/tutorials/2.5/
+- To achieve the most realistic pseudo-random numbers, we used the Mersenne Twister pseudorandom number generator in C++: http://www.cplusplus.com/reference/random/mt19937/
+- AnimatedSprite.h, Animation.h, Animation.cpp, and AnimatedSprite.cpp were taken from: https://github.com/SFML/SFML/wiki/Source:-AnimatedSprite, and were used to add animated sprites in the game
+- Collision.h and Collision.cpp were taken from: https://github.com/SFML/SFML/wiki/Source:-Simple-Collision-Detection-for-SFML-2, and were used for pixel-perfect collision detection

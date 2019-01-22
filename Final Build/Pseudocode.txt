@@ -1,0 +1,30 @@
+We used pseudocode, which is an industry-standard methodology, to create the world generation algorithm for chunks in the world. This was made before we made the world generation algorithm, just to get us started.
+
+void (y, x, type):
+	if the square at y,x has a biome type of none and it hasn't been found:
+		square found = true
+
+		declare type
+
+		declare water and ground variables
+
+		if its the first chunk:
+			if the desired type is none or fits the chance of the water and ground variables, set new type, otherwise use old type
+		if its not the first chunk in the y:
+			take from the top chunk
+		if its 	not the first chunk in the x:
+			take from the left chunk
+		otherwise 
+			if the desired type is none or fits the chance of the water and ground variables, set new type, otherwise use old type
+
+		square set type to type
+
+		switch random int from 1,5:
+		case 1:
+			goes recursively left, right, up, down
+		case 2:
+			goes recursively right, left, up, down
+		case 3:
+			goes recursively up, left, right, down
+		case 4:
+			goes recursively down, left, right, up
